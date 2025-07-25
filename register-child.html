@@ -3,11 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register Child - ImmunTracker</title>
+    <title>Add Child - ImmunTracker</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <script>
+        // Check authentication before loading page
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof auth === 'undefined') {
+                window.location.href = 'login.html';
+                return;
+            }
+            if (!auth.requireAuth()) return;
+        });
+    </script>
+    
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
@@ -24,57 +35,20 @@
                 <li><a href="education.html">Education</a></li>
                 <li><a href="offline.html">Offline</a></li>
             </ul>
+            <div class="nav-user">
+                <span id="userGreeting">Welcome!</span>
+                <button id="logoutBtn" class="btn btn-outline" style="font-size: 0.875rem; padding: 0.5rem 1rem;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
             <button class="nav-toggle">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
     </nav>
-
+                                    <textarea id="medicalConditions" name="medicalConditions" class="form-control" rows="3" placeholder="Any known allergies, medical conditions, or special considerations (optional)..."></textarea>
     <!-- Main Content -->
-    <section class="section">
-        <div class="container">
-            <div style="max-width: 600px; margin: 0 auto;">
-                <div class="text-center mb-4">
-                    <h1 style="font-size: 2.5rem; font-weight: 700; color: var(--gray-800); margin-bottom: 1rem;">
-                        Register New Child
-                    </h1>
-                    <p style="font-size: 1.125rem; color: var(--gray-600);">
-                        Add your child's information to start tracking their immunization journey
-                    </p>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">
-                            <i class="fas fa-user-plus" style="color: var(--primary-500); margin-right: 0.5rem;"></i>
-                            Child Information
-                        </h2>
-                    </div>
-                    <div class="card-body">
-                        <form id="registerForm">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="firstName" class="form-label">First Name *</label>
-                                    <input type="text" id="firstName" name="firstName" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lastName" class="form-label">Last Name *</label>
-                                    <input type="text" id="lastName" name="lastName" class="form-control" required>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="dateOfBirth" class="form-label">Date of Birth *</label>
-                                    <input type="date" id="dateOfBirth" name="dateOfBirth" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="gender" class="form-label">Gender *</label>
-                                    <select id="gender" name="gender" class="form-control" required>
-                                        <option value="">Select Gender</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                        <option value="other">Other</option>
                                     </select>
                                 </div>
                             </div>
@@ -132,42 +106,17 @@
                                     <option value="guardian">Legal Guardian</option>
                                     <option value="grandparent">Grandparent</option>
                                     <option value="other">Other</option>
-                                </select>
-                            </div>
-
-                            <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--gray-200);">
-
-                            <h3 style="font-size: 1.25rem; font-weight: 600; color: var(--gray-800); margin-bottom: 1rem;">
-                                <i class="fas fa-hospital" style="color: var(--accent-500); margin-right: 0.5rem;"></i>
-                                Healthcare Information
-                            </h3>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="pediatrician" class="form-label">Pediatrician Name</label>
-                                    <input type="text" id="pediatrician" name="pediatrician" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="clinic" class="form-label">Clinic/Hospital</label>
-                                    <input type="text" id="clinic" name="clinic" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="insurance" class="form-label">Insurance Information</label>
-                                <input type="text" id="insurance" name="insurance" class="form-control" placeholder="Insurance provider and policy number">
-                            </div>
                         </form>
                     </div>
                     <div class="card-footer">
                         <div class="flex flex-between">
-                            <a href="index.html" class="btn btn-outline">
+                            <a href="view-records.html" class="btn btn-outline">
                                 <i class="fas fa-arrow-left"></i>
                                 Cancel
                             </a>
-                            <button type="submit" form="registerForm" class="btn btn-primary" id="submitBtn">
+                            <button type="submit" form="addChildForm" class="btn btn-primary" id="submitBtn">
                                 <i class="fas fa-save"></i>
-                                Register Child
+                                Add Child
                             </button>
                         </div>
                     </div>
@@ -179,21 +128,31 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
     <script src="config.js"></script>
+    <script src="auth.js"></script>
     <script src="firebase-utils.js"></script>
     <script src="utils.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('registerForm');
+            // Check authentication
+            if (!auth.requireAuth()) return;
+            
+            // Update user greeting
+            const currentUser = auth.getCurrentUser();
+            if (currentUser) {
+                document.getElementById('userGreeting').textContent = `Welcome, ${currentUser.firstName}!`;
+            }
+            
+            // Setup logout
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                auth.logout();
+            });
+            
+            const form = document.getElementById('addChildForm');
             const submitBtn = document.getElementById('submitBtn');
             
             // Set max date to today for date of birth
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('dateOfBirth').setAttribute('max', today);
-            
-            // Format phone number as user types
-            document.getElementById('parentPhone').addEventListener('input', (e) => {
-                e.target.value = formatPhoneNumber(e.target.value);
-            });
             
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -205,7 +164,7 @@
                 
                 // Show loading state
                 const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<div class="loading"></div> Registering...';
+                submitBtn.innerHTML = '<div class="loading"></div> Adding child...';
                 submitBtn.disabled = true;
                 
                 try {
@@ -216,40 +175,27 @@
                         dateOfBirth: formData.get('dateOfBirth'),
                         gender: formData.get('gender'),
                         birthPlace: formData.get('birthPlace'),
-                        medicalConditions: formData.get('medicalConditions'),
-                        parent: {
-                            firstName: formData.get('parentFirstName'),
-                            lastName: formData.get('parentLastName'),
-                            email: formData.get('parentEmail'),
-                            phone: formData.get('parentPhone'),
-                            address: formData.get('address'),
-                            relationship: formData.get('relationship')
-                        },
-                        healthcare: {
-                            pediatrician: formData.get('pediatrician'),
-                            clinic: formData.get('clinic'),
-                            insurance: formData.get('insurance')
-                        }
+                        medicalConditions: formData.get('medicalConditions')
                     };
                     
                     const result = await childOperations.addChild(childData);
                     
                     if (result.success) {
-                        utils.showSuccess('Child registered successfully!');
+                        utils.showSuccess('Child added successfully!');
                         
                         // Store child ID for potential redirect
-                        storage.set('lastRegisteredChild', result.id);
+                        storage.set('lastAddedChild', result.id);
                         
                         // Redirect to view records after a delay
                         setTimeout(() => {
                             window.location.href = 'view-records.html';
                         }, 2000);
                     } else {
-                        throw new Error(result.error || 'Failed to register child');
+                        throw new Error(result.error || 'Failed to add child');
                     }
                 } catch (error) {
-                    console.error('Registration error:', error);
-                    utils.showError(document.querySelector('.card-body'), `Registration failed: ${error.message}`);
+                    console.error('Add child error:', error);
+                    utils.showError(document.querySelector('.card-body'), `Failed to add child: ${error.message}`);
                 } finally {
                     // Restore button state
                     submitBtn.innerHTML = originalText;

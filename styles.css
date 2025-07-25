@@ -154,6 +154,14 @@ body {
   width: 80%;
 }
 
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 500;
+  color: var(--gray-700);
+}
+
 .nav-toggle {
   display: none;
   background: none;

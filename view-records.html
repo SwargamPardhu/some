@@ -8,6 +8,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <script>
+        // Check authentication before loading page
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof auth === 'undefined') {
+                window.location.href = 'login.html';
+                return;
+            }
+            if (!auth.requireAuth()) return;
+        });
+    </script>
+    
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
@@ -24,6 +35,13 @@
                 <li><a href="education.html">Education</a></li>
                 <li><a href="offline.html">Offline</a></li>
             </ul>
+            <div class="nav-user">
+                <span id="userGreeting">Welcome!</span>
+                <button id="logoutBtn" class="btn btn-outline" style="font-size: 0.875rem; padding: 0.5rem 1rem;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
             <button class="nav-toggle">
                 <i class="fas fa-bars"></i>
             </button>
@@ -43,7 +61,7 @@
                     </p>
                 </div>
                 <a href="register-child.html" class="btn btn-primary">
-                    <i class="fas fa-plus"></i>
+                        Add Your First Child
                     Add Child
                 </a>
             </div>
@@ -119,6 +137,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
     <script src="config.js"></script>
+    <script src="auth.js"></script>
     <script src="firebase-utils.js"></script>
     <script src="utils.js"></script>
     <script>
@@ -126,6 +145,20 @@
         let filteredChildren = [];
         
         document.addEventListener('DOMContentLoaded', () => {
+            // Check authentication
+            if (!auth.requireAuth()) return;
+            
+            // Update user greeting
+            const currentUser = auth.getCurrentUser();
+            if (currentUser) {
+                document.getElementById('userGreeting').textContent = `Welcome, ${currentUser.firstName}!`;
+            }
+            
+            // Setup logout
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                auth.logout();
+            });
+            
             loadChildren();
             setupEventListeners();
         });
