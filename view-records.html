@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Records - ImmunTracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <i class="fas fa-shield-alt"></i>
+                ImmunTracker
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="register-child.html">Register Child</a></li>
+                <li><a href="view-records.html">View Records</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="offline.html">Offline</a></li>
+            </ul>
+            <button class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="section">
+        <div class="container">
+            <div class="flex-between mb-3">
+                <div>
+                    <h1 style="font-size: 2.5rem; font-weight: 700; color: var(--gray-800); margin-bottom: 0.5rem;">
+                        Vaccination Records
+                    </h1>
+                    <p style="font-size: 1.125rem; color: var(--gray-600);">
+                        View and manage all children's immunization records
+                    </p>
+                </div>
+                <a href="register-child.html" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Add Child
+                </a>
+            </div>
+
+            <!-- Search and Filter -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="flex" style="gap: 1rem; align-items: center; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search by child name...">
+                        </div>
+                        <div>
+                            <select id="filterAge" class="form-control">
+                                <option value="">All Ages</option>
+                                <option value="0-1">0-1 years</option>
+                                <option value="1-5">1-5 years</option>
+                                <option value="5+">5+ years</option>
+                            </select>
+                        </div>
+                        <div>
+                            <select id="filterStatus" class="form-control">
+                                <option value="">All Status</option>
+                                <option value="up-to-date">Up to Date</option>
+                                <option value="due">Due</option>
+                                <option value="overdue">Overdue</option>
+                            </select>
+                        </div>
+                        <button id="refreshBtn" class="btn btn-secondary">
+                            <i class="fas fa-sync-alt"></i>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Children Records -->
+            <div id="childrenContainer">
+                <!-- Content will be loaded dynamically -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" style="display: none;">
+                <div class="card">
+                    <div class="card-body text-center" style="padding: 3rem;">
+                        <i class="fas fa-baby" style="font-size: 4rem; color: var(--gray-300); margin-bottom: 1rem;"></i>
+                        <h3 style="color: var(--gray-600); margin-bottom: 1rem;">No Children Registered</h3>
+                        <p style="color: var(--gray-500); margin-bottom: 2rem;">
+                            Get started by registering your first child to begin tracking their immunizations.
+                        </p>
+                        <a href="register-child.html" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Register Your First Child
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Child Details Modal -->
+    <div id="childModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Child Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+    <script src="config.js"></script>
+    <script src="firebase-utils.js"></script>
+    <script src="utils.js"></script>
+    <script>
+        let allChildren = [];
+        let filteredChildren = [];
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadChildren();
+            setupEventListeners();
+        });
+        
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', debounce(filterChildren, 300));
+            document.getElementById('filterAge').addEventListener('change', filterChildren);
+            document.getElementById('filterStatus').addEventListener('change', filterChildren);
+            document.getElementById('refreshBtn').addEventListener('click', loadChildren);
+        }
+        
+        async function loadChildren() {
+            const container = document.getElementById('childrenContainer');
+            const emptyState = document.getElementById('emptyState');
+            
+            utils.showLoading(container);
+            emptyState.style.display = 'none';
+            
+            try {
+                const result = await childOperations.getAllChildren();
+                
+                if (result.success) {
+                    allChildren = result.data;
+                    
+                    if (allChildren.length === 0) {
+                        container.innerHTML = '';
+                        emptyState.style.display = 'block';
+                    } else {
+                        // Get vaccination data for each child
+                        for (let child of allChildren) {
+                            const vaccinationsResult = await vaccinationOperations.getChildVaccinations(child.id);
+                            child.vaccinations = vaccinationsResult.success ? vaccinationsResult.data : [];
+                            
+                            // Generate schedule and calculate status
+                            const schedule = vaccineSchedule.generateSchedule(child.dateOfBirth);
+                            child.schedule = schedule;
+                            child.vaccinationStatus = calculateVaccinationStatus(child.vaccinations, schedule);
+                        }
+                        
+                        filteredChildren = [...allChildren];
+                        renderChildren();
+                    }
+                } else {
+                    throw new Error(result.error || 'Failed to load children');
+                }
+            } catch (error) {
+                console.error('Error loading children:', error);
+                utils.showError(container, `Failed to load children: ${error.message}`);
+            }
+        }
+        
+        function calculateVaccinationStatus(vaccinations, schedule) {
+            const completedVaccines = vaccinations.filter(v => v.administered).length;
+            const totalVaccines = schedule.length;
+            const dueVaccines = schedule.filter(v => v.status === 'due').length;
+            const overdueVaccines = schedule.filter(v => v.status === 'overdue').length;
+            
+            let status = 'up-to-date';
+            if (overdueVaccines > 0) {
+                status = 'overdue';
+            } else if (dueVaccines > 0) {
+                status = 'due';
+            }
+            
+            return {
+                completed: completedVaccines,
+                total: totalVaccines,
+                due: dueVaccines,
+                overdue: overdueVaccines,
+                status: status,
+                completionRate: Math.round((completedVaccines / totalVaccines) * 100)
+            };
+        }
+        
+        function filterChildren() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const ageFilter = document.getElementById('filterAge').value;
+            const statusFilter = document.getElementById('filterStatus').value;
+            
+            filteredChildren = allChildren.filter(child => {
+                // Search filter
+                const fullName = `${child.firstName} ${child.lastName}`.toLowerCase();
+                const matchesSearch = fullName.includes(searchTerm);
+                
+                // Age filter
+                let matchesAge = true;
+                if (ageFilter) {
+                    const age = calculateChildAge(child.dateOfBirth);
+                    switch (ageFilter) {
+                        case '0-1':
+                            matchesAge = age < 1;
+                            break;
+                        case '1-5':
+                            matchesAge = age >= 1 && age < 5;
+                            break;
+                        case '5+':
+                            matchesAge = age >= 5;
+                            break;
+                    }
+                }
+                
+                // Status filter
+                let matchesStatus = true;
+                if (statusFilter && child.vaccinationStatus) {
+                    matchesStatus = child.vaccinationStatus.status === statusFilter;
+                }
+                
+                return matchesSearch && matchesAge && matchesStatus;
+            });
+            
+            renderChildren();
+        }
+        
+        function calculateChildAge(birthDate) {
+            const birth = new Date(birthDate);
+            const today = new Date();
+            return today.getFullYear() - birth.getFullYear();
+        }
+        
+        function renderChildren() {
+            const container = document.getElementById('childrenContainer');
+            
+            if (filteredChildren.length === 0) {
+                container.innerHTML = `
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-search" style="font-size: 2rem; color: var(--gray-300); margin-bottom: 1rem;"></i>
+                            <p style="color: var(--gray-500);">No children found matching your criteria.</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = filteredChildren.map(child => `
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="flex-between mb-2">
+                            <div>
+                                <h3 style="font-size: 1.25rem; font-weight: 600; color: var(--gray-800); margin-bottom: 0.25rem;">
+                                    ${child.firstName} ${child.lastName}
+                                </h3>
+                                <p style="color: var(--gray-600); margin-bottom: 0.5rem;">
+                                    Born: ${utils.formatDate(child.dateOfBirth)} • Age: ${utils.calculateAge(child.dateOfBirth)}
+                                </p>
+                            </div>
+                            <div class="flex" style="gap: 0.5rem;">
+                                <span class="badge badge-${utils.getStatusColor(child.vaccinationStatus.status)}">
+                                    ${child.vaccinationStatus.status.replace('-', ' ').toUpperCase()}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-4 mb-3">
+                            <div class="text-center">
+                                <div style="font-size: 1.5rem; font-weight: 600; color: var(--primary-600);">
+                                    ${child.vaccinationStatus.completed}/${child.vaccinationStatus.total}
+                                </div>
+                                <div style="font-size: 0.875rem; color: var(--gray-600);">Completed</div>
+                            </div>
+                            <div class="text-center">
+                                <div style="font-size: 1.5rem; font-weight: 600; color: var(--warning-500);">
+                                    ${child.vaccinationStatus.due}
+                                </div>
+                                <div style="font-size: 0.875rem; color: var(--gray-600);">Due</div>
+                            </div>
+                            <div class="text-center">
+                                <div style="font-size: 1.5rem; font-weight: 600; color: var(--error-500);">
+                                    ${child.vaccinationStatus.overdue}
+                                </div>
+                                <div style="font-size: 0.875rem; color: var(--gray-600);">Overdue</div>
+                            </div>
+                            <div class="text-center">
+                                <div style="font-size: 1.5rem; font-weight: 600; color: var(--success-500);">
+                                    ${child.vaccinationStatus.completionRate}%
+                                </div>
+                                <div style="font-size: 0.875rem; color: var(--gray-600);">Complete</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex" style="gap: 0.5rem; flex-wrap: wrap;">
+                            <button onclick="viewChild('${child.id}')" class="btn btn-primary" style="font-size: 0.875rem;">
+                                <i class="fas fa-eye"></i>
+                                View Details
+                            </button>
+                            <a href="schedule.html?child=${child.id}" class="btn btn-secondary" style="font-size: 0.875rem;">
+                                <i class="fas fa-calendar"></i>
+                                Schedule
+                            </a>
+                            <a href="update-record.html?child=${child.id}" class="btn btn-outline" style="font-size: 0.875rem;">
+                                <i class="fas fa-edit"></i>
+                                Edit
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        async function viewChild(childId) {
+            const modal = document.getElementById('childModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            const child = allChildren.find(c => c.id === childId);
+            if (!child) return;
+            
+            modalTitle.textContent = `${child.firstName} ${child.lastName}`;
+            utils.showLoading(modalBody);
+            modal.style.display = 'flex';
+            
+            try {
+                modalBody.innerHTML = `
+                    <div class="grid grid-2" style="margin-bottom: 2rem;">
+                        <div>
+                            <h4 style="font-weight: 600; color: var(--gray-800); margin-bottom: 1rem;">Personal Information</h4>
+                            <p><strong>Full Name:</strong> ${child.firstName} ${child.lastName}</p>
+                            <p><strong>Date of Birth:</strong> ${utils.formatDate(child.dateOfBirth)}</p>
+                            <p><strong>Age:</strong> ${utils.calculateAge(child.dateOfBirth)}</p>
+                            <p><strong>Gender:</strong> ${child.gender}</p>
+                            ${child.birthPlace ? `<p><strong>Birth Place:</strong> ${child.birthPlace}</p>` : ''}
+                            ${child.medicalConditions ? `<p><strong>Medical Conditions:</strong> ${child.medicalConditions}</p>` : ''}
+                        </div>
+                        <div>
+                            <h4 style="font-weight: 600; color: var(--gray-800); margin-bottom: 1rem;">Parent/Guardian</h4>
+                            <p><strong>Name:</strong> ${child.parent.firstName} ${child.parent.lastName}</p>
+                            <p><strong>Relationship:</strong> ${child.parent.relationship}</p>
+                            <p><strong>Email:</strong> ${child.parent.email}</p>
+                            <p><strong>Phone:</strong> ${child.parent.phone}</p>
+                            ${child.parent.address ? `<p><strong>Address:</strong> ${child.parent.address}</p>` : ''}
+                        </div>
+                    </div>
+                    
+                    <h4 style="font-weight: 600; color: var(--gray-800); margin-bottom: 1rem;">Recent Vaccinations</h4>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Vaccine</th>
+                                    <th>Date Administered</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${child.vaccinations.slice(-5).map(vaccination => `
+                                    <tr>
+                                        <td>${vaccination.vaccine}</td>
+                                        <td>${vaccination.dateAdministered ? utils.formatDate(vaccination.dateAdministered) : 'Not administered'}</td>
+                                        <td>
+                                            <span class="badge badge-${vaccination.administered ? 'success' : 'secondary'}">
+                                                ${vaccination.administered ? 'Completed' : 'Pending'}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } catch (error) {
+                utils.showError(modalBody, 'Failed to load child details');
+            }
+        }
+        
+        // Modal functionality
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('childModal');
+            if (e.target.classList.contains('modal-close') || e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
+    
+    <!-- Modal Styles -->
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-xl);
+            max-width: 800px;
+            width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray-500);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+        
+        .modal-close:hover {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+    </style>
+</body>
+</html>

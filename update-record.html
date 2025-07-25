@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Record - ImmunTracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <i class="fas fa-shield-alt"></i>
+                ImmunTracker
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="register-child.html">Register Child</a></li>
+                <li><a href="view-records.html">View Records</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="offline.html">Offline</a></li>
+            </ul>
+            <button class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="section">
+        <div class="container">
+            <div style="max-width: 600px; margin: 0 auto;">
+                <div class="text-center mb-4">
+                    <h1 style="font-size: 2.5rem; font-weight: 700; color: var(--gray-800); margin-bottom: 1rem;">
+                        Update Child Record
+                    </h1>
+                    <p style="font-size: 1.125rem; color: var(--gray-600);">
+                        Edit your child's information and vaccination records
+                    </p>
+                </div>
+
+                <!-- Child Selector -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="childSelect" class="form-label">Select Child to Update:</label>
+                            <select id="childSelect" class="form-control">
+                                <option value="">Choose a child...</option>
+                            </select>
+                        </div>
+                        <button id="loadChildBtn" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                            Load Child Data
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Update Form -->
+                <div id="updateFormContainer" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i class="fas fa-edit" style="color: var(--primary-500); margin-right: 0.5rem;"></i>
+                                Child Information
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <form id="updateForm">
+                                <input type="hidden" id="childId">
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="firstName" class="form-label">First Name *</label>
+                                        <input type="text" id="firstName" name="firstName" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="lastName" class="form-label">Last Name *</label>
+                                        <input type="text" id="lastName" name="lastName" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="dateOfBirth" class="form-label">Date of Birth *</label>
+                                        <input type="date" id="dateOfBirth" name="dateOfBirth" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="gender" class="form-label">Gender *</label>
+                                        <select id="gender" name="gender" class="form-control" required>
+                                            <option value="">Select Gender</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="birthPlace" class="form-label">Place of Birth</label>
+                                    <input type="text" id="birthPlace" name="birthPlace" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="medicalConditions" class="form-label">Medical Conditions</label>
+                                    <textarea id="medicalConditions" name="medicalConditions" class="form-control" rows="3"></textarea>
+                                </div>
+
+                                <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--gray-200);">
+
+                                <h3 style="font-size: 1.25rem; font-weight: 600; color: var(--gray-800); margin-bottom: 1rem;">
+                                    <i class="fas fa-users" style="color: var(--secondary-500); margin-right: 0.5rem;"></i>
+                                    Parent/Guardian Information
+                                </h3>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="parentFirstName" class="form-label">Parent/Guardian First Name *</label>
+                                        <input type="text" id="parentFirstName" name="parentFirstName" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="parentLastName" class="form-label">Parent/Guardian Last Name *</label>
+                                        <input type="text" id="parentLastName" name="parentLastName" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="parentEmail" class="form-label">Email Address *</label>
+                                        <input type="email" id="parentEmail" name="parentEmail" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="parentPhone" class="form-label">Phone Number *</label>
+                                        <input type="tel" id="parentPhone" name="parentPhone" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="address" class="form-label">Address</label>
+                                    <textarea id="address" name="address" class="form-control" rows="3"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="relationship" class="form-label">Relationship to Child *</label>
+                                    <select id="relationship" name="relationship" class="form-control" required>
+                                        <option value="">Select Relationship</option>
+                                        <option value="mother">Mother</option>
+                                        <option value="father">Father</option>
+                                        <option value="guardian">Legal Guardian</option>
+                                        <option value="grandparent">Grandparent</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+
+                                <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--gray-200);">
+
+                                <h3 style="font-size: 1.25rem; font-weight: 600; color: var(--gray-800); margin-bottom: 1rem;">
+                                    <i class="fas fa-hospital" style="color: var(--accent-500); margin-right: 0.5rem;"></i>
+                                    Healthcare Information
+                                </h3>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="pediatrician" class="form-label">Pediatrician Name</label>
+                                        <input type="text" id="pediatrician" name="pediatrician" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="clinic" class="form-label">Clinic/Hospital</label>
+                                        <input type="text" id="clinic" name="clinic" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="insurance" class="form-label">Insurance Information</label>
+                                    <input type="text" id="insurance" name="insurance" class="form-control">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            <div class="flex flex-between">
+                                <div class="flex" style="gap: 0.5rem;">
+                                    <a href="view-records.html" class="btn btn-outline">
+                                        <i class="fas fa-arrow-left"></i>
+                                        Back
+                                    </a>
+                                    <button type="button" id="deleteChildBtn" class="btn" style="background: var(--error-500); color: white;">
+                                        <i class="fas fa-trash"></i>
+                                        Delete Child
+                                    </button>
+                                </div>
+                                <button type="submit" form="updateForm" class="btn btn-primary" id="updateBtn">
+                                    <i class="fas fa-save"></i>
+                                    Update Record
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vaccination Records -->
+                <div id="vaccinationRecords" style="display: none;">
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <div class="flex-between">
+                                <h3 class="card-title">
+                                    <i class="fas fa-syringe" style="color: var(--secondary-500); margin-right: 0.5rem;"></i>
+                                    Vaccination Records
+                                </h3>
+                                <button id="addVaccinationBtn" class="btn btn-secondary">
+                                    <i class="fas fa-plus"></i>
+                                    Add Vaccination
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="vaccinationsList">
+                                <!-- Vaccinations will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState">
+                    <div class="card">
+                        <div class="card-body text-center" style="padding: 3rem;">
+                            <i class="fas fa-edit" style="font-size: 4rem; color: var(--gray-300); margin-bottom: 1rem;"></i>
+                            <h3 style="color: var(--gray-600); margin-bottom: 1rem;">Select a Child to Update</h3>
+                            <p style="color: var(--gray-500); margin-bottom: 2rem;">
+                                Choose a child from the dropdown above to edit their information and vaccination records.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 style="color: var(--error-500);">Confirm Deletion</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--error-500); margin-bottom: 1rem;"></i>
+                    <h3 style="color: var(--gray-800); margin-bottom: 1rem;">Are you sure?</h3>
+                    <p style="color: var(--gray-600); margin-bottom: 2rem;">
+                        This action will permanently delete <strong id="deleteChildName"></strong> and all their vaccination records. This cannot be undone.
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline modal-close">Cancel</button>
+                <button type="button" class="btn" style="background: var(--error-500); color: white;" id="confirmDeleteBtn">
+                    <i class="fas fa-trash"></i>
+                    Delete Permanently
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+    <script src="config.js"></script>
+    <script src="firebase-utils.js"></script>
+    <script src="utils.js"></script>
+    <script>
+        let currentChild = null;
+        let childVaccinations = [];
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadChildren();
+            setupEventListeners();
+            
+            // Check if child ID is in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const childId = urlParams.get('child');
+            if (childId) {
+                setTimeout(() => {
+                    document.getElementById('childSelect').value = childId;
+                    loadChild();
+                }, 1000);
+            }
+        });
+        
+        function setupEventListeners() {
+            document.getElementById('loadChildBtn').addEventListener('click', loadChild);
+            document.getElementById('updateForm').addEventListener('submit', updateChild);
+            document.getElementById('deleteChildBtn').addEventListener('click', showDeleteModal);
+            document.getElementById('confirmDeleteBtn').addEventListener('click', deleteChild);
+            
+            // Format phone number as user types
+            document.getElementById('parentPhone').addEventListener('input', (e) => {
+                e.target.value = formatPhoneNumber(e.target.value);
+            });
+            
+            // Modal functionality
+            document.addEventListener('click', (e) => {
+                const modal = document.getElementById('deleteModal');
+                if (e.target.classList.contains('modal-close') || e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+        
+        async function loadChildren() {
+            const select = document.getElementById('childSelect');
+            
+            try {
+                const result = await childOperations.getAllChildren();
+                
+                if (result.success) {
+                    select.innerHTML = '<option value="">Choose a child...</option>';
+                    result.data.forEach(child => {
+                        const option = document.createElement('option');
+                        option.value = child.id;
+                        option.textContent = `${child.firstName} ${child.lastName}`;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading children:', error);
+            }
+        }
+        
+        async function loadChild() {
+            const childId = document.getElementById('childSelect').value;
+            if (!childId) {
+                document.getElementById('updateFormContainer').style.display = 'none';
+                document.getElementById('vaccinationRecords').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'block';
+                return;
+            }
+            
+            const container = document.getElementById('updateFormContainer');
+            utils.showLoading(container);
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('vaccinationRecords').style.display = 'none';
+            
+            try {
+                // Get child data
+                const childResult = await childOperations.getChildById(childId);
+                if (!childResult.success) throw new Error('Child not found');
+                
+                currentChild = childResult.data;
+                
+                // Populate form fields
+                document.getElementById('childId').value = currentChild.id;
+                document.getElementById('firstName').value = currentChild.firstName;
+                document.getElementById('lastName').value = currentChild.lastName;
+                document.getElementById('dateOfBirth').value = currentChild.dateOfBirth;
+                document.getElementById('gender').value = currentChild.gender;
+                document.getElementById('birthPlace').value = currentChild.birthPlace || '';
+                document.getElementById('medicalConditions').value = currentChild.medicalConditions || '';
+                
+                // Parent information
+                if (currentChild.parent) {
+                    document.getElementById('parentFirstName').value = currentChild.parent.firstName || '';
+                    document.getElementById('parentLastName').value = currentChild.parent.lastName || '';
+                    document.getElementById('parentEmail').value = currentChild.parent.email || '';
+                    document.getElementById('parentPhone').value = currentChild.parent.phone || '';
+                    document.getElementById('address').value = currentChild.parent.address || '';
+                    document.getElementById('relationship').value = currentChild.parent.relationship || '';
+                }
+                
+                // Healthcare information
+                if (currentChild.healthcare) {
+                    document.getElementById('pediatrician').value = currentChild.healthcare.pediatrician || '';
+                    document.getElementById('clinic').value = currentChild.healthcare.clinic || '';
+                    document.getElementById('insurance').value = currentChild.healthcare.insurance || '';
+                }
+                
+                // Load vaccination records
+                await loadVaccinationRecords(childId);
+                
+                container.style.display = 'block';
+                document.getElementById('vaccinationRecords').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error loading child:', error);
+                utils.showError(container, `Failed to load child data: ${error.message}`);
+            }
+        }
+        
+        async function loadVaccinationRecords(childId) {
+            const container = document.getElementById('vaccinationsList');
+            utils.showLoading(container);
+            
+            try {
+                const result = await vaccinationOperations.getChildVaccinations(childId);
+                childVaccinations = result.success ? result.data : [];
+                
+                if (childVaccinations.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center" style="padding: 2rem; color: var(--gray-500);">
+                            <i class="fas fa-syringe" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <p>No vaccination records found.</p>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Vaccine</th>
+                                        <th>Date</th>
+                                        <th>Provider</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${childVaccinations.map(vaccination => `
+                                        <tr>
+                                            <td><strong>${vaccination.vaccine}</strong></td>
+                                            <td>${vaccination.dateAdministered ? utils.formatDate(vaccination.dateAdministered) : 'Not administered'}</td>
+                                            <td>${vaccination.administratorName || 'Not specified'}</td>
+                                            <td>
+                                                <span class="badge badge-${vaccination.administered ? 'success' : 'secondary'}">
+                                                    ${vaccination.administered ? 'Completed' : 'Pending'}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button onclick="editVaccination('${vaccination.id}')" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading vaccinations:', error);
+                utils.showError(container, 'Failed to load vaccination records');
+            }
+        }
+        
+        async function updateChild(e) {
+            e.preventDefault();
+            
+            if (!validateForm(e.target)) {
+                utils.showError(document.querySelector('.card-body'), 'Please fill in all required fields.');
+                return;
+            }
+            
+            const updateBtn = document.getElementById('updateBtn');
+            const originalText = updateBtn.innerHTML;
+            updateBtn.innerHTML = '<div class="loading"></div> Updating...';
+            updateBtn.disabled = true;
+            
+            try {
+                const formData = new FormData(e.target);
+                const updates = {
+                    firstName: formData.get('firstName'),
+                    lastName: formData.get('lastName'),
+                    dateOfBirth: formData.get('dateOfBirth'),
+                    gender: formData.get('gender'),
+                    birthPlace: formData.get('birthPlace'),
+                    medicalConditions: formData.get('medicalConditions'),
+                    parent: {
+                        firstName: formData.get('parentFirstName'),
+                        lastName: formData.get('parentLastName'),
+                        email: formData.get('parentEmail'),
+                        phone: formData.get('parentPhone'),
+                        address: formData.get('address'),
+                        relationship: formData.get('relationship')
+                    },
+                    healthcare: {
+                        pediatrician: formData.get('pediatrician'),
+                        clinic: formData.get('clinic'),
+                        insurance: formData.get('insurance')
+                    }
+                };
+                
+                const childId = document.getElementById('childId').value;
+                const result = await childOperations.updateChild(childId, updates);
+                
+                if (result.success) {
+                    utils.showSuccess('Child record updated successfully!');
+                    currentChild = { ...currentChild, ...updates };
+                } else {
+                    throw new Error(result.error || 'Failed to update child');
+                }
+            } catch (error) {
+                console.error('Update error:', error);
+                utils.showError(document.querySelector('.card-body'), `Update failed: ${error.message}`);
+            } finally {
+                updateBtn.innerHTML = originalText;
+                updateBtn.disabled = false;
+            }
+        }
+        
+        function showDeleteModal() {
+            if (!currentChild) return;
+            
+            document.getElementById('deleteChildName').textContent = `${currentChild.firstName} ${currentChild.lastName}`;
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+        
+        async function deleteChild() {
+            if (!currentChild) return;
+            
+            const confirmBtn = document.getElementById('confirmDeleteBtn');
+            const originalText = confirmBtn.innerHTML;
+            confirmBtn.innerHTML = '<div class="loading"></div> Deleting...';
+            confirmBtn.disabled = true;
+            
+            try {
+                const result = await childOperations.deleteChild(currentChild.id);
+                
+                if (result.success) {
+                    utils.showSuccess('Child record deleted successfully!');
+                    document.getElementById('deleteModal').style.display = 'none';
+                    
+                    // Redirect after delay
+                    setTimeout(() => {
+                        window.location.href = 'view-records.html';
+                    }, 2000);
+                } else {
+                    throw new Error(result.error || 'Failed to delete child');
+                }
+            } catch (error) {
+                console.error('Delete error:', error);
+                utils.showError(document.querySelector('.modal-body'), `Delete failed: ${error.message}`);
+            } finally {
+                confirmBtn.innerHTML = originalText;
+                confirmBtn.disabled = false;
+            }
+        }
+        
+        function editVaccination(vaccinationId) {
+            // This would open a modal to edit vaccination details
+            // For now, just show an alert
+            alert('Vaccination editing feature coming soon!');
+        }
+    </script>
+    
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-xl);
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray-500);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+        
+        .modal-close:hover {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+    </style>
+</body>
+</html>

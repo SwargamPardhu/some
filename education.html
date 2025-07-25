@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaccine Education - ImmunTracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <i class="fas fa-shield-alt"></i>
+                ImmunTracker
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="register-child.html">Register Child</a></li>
+                <li><a href="view-records.html">View Records</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="offline.html">Offline</a></li>
+            </ul>
+            <button class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" style="padding: 3rem 0;">
+        <div class="hero-content">
+            <h1 style="font-size: 2.5rem;">Vaccine Education Center</h1>
+            <p style="font-size: 1.125rem;">
+                Learn everything you need to know about vaccines, their importance, and how they protect your child's health
+            </p>
+        </div>
+    </section>
+
+    <!-- Search and Categories -->
+    <section class="section" style="padding: 2rem 0;">
+        <div class="container">
+            <div class="card">
+                <div class="card-body">
+                    <div class="flex" style="gap: 1rem; align-items: center; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search for vaccine information...">
+                        </div>
+                        <div>
+                            <select id="categoryFilter" class="form-control">
+                                <option value="">All Categories</option>
+                                <option value="basics">Vaccine Basics</option>
+                                <option value="safety">Safety & Side Effects</option>
+                                <option value="schedule">Schedule & Timing</option>
+                                <option value="diseases">Diseases Prevented</option>
+                                <option value="myths">Myths & Facts</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Educational Content -->
+    <section class="section">
+        <div class="container">
+            <!-- Vaccine Basics -->
+            <div class="education-category" data-category="basics">
+                <h2 style="font-size: 2rem; font-weight: 600; color: var(--gray-800); margin-bottom: 2rem; text-align: center;">
+                    <i class="fas fa-graduation-cap" style="color: var(--primary-500); margin-right: 0.5rem;"></i>
+                    Vaccine Basics
+                </h2>
+                
+                <div class="grid grid-3 mb-4">
+                    <div class="card education-card" data-searchable="what are vaccines how do vaccines work immune system protection">
+                        <div class="card-body">
+                            <div style="background: linear-gradient(135deg, var(--primary-500), var(--secondary-500)); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                                <i class="fas fa-shield-virus" style="color: white; font-size: 1.5rem;"></i>
+                            </div>
+                            <h3 class="card-title">What Are Vaccines?</h3>
+                            <p class="card-text">Vaccines are biological preparations that help your body develop immunity to specific diseases. They contain weakened or inactive parts of pathogens that trigger an immune response.</p>
+                            <button class="btn btn-outline" onclick="showDetails('vaccines-basics')">Learn More</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card education-card" data-searchable="how vaccines work immune system antibodies memory cells">
+                        <div class="card-body">
+                            <div style="background: linear-gradient(135deg, var(--secondary-500), var(--accent-500)); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                                <i class="fas fa-microscope" style="color: white; font-size: 1.5rem;"></i>
+                            </div>
+                            <h3 class="card-title">How Do Vaccines Work?</h3>
+                            <p class="card-text">Vaccines train your immune system to recognize and fight diseases. They help your body create antibodies and memory cells without causing the actual disease.</p>
+                            <button class="btn btn-outline" onclick="showDetails('how-vaccines-work')">Learn More</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card education-card" data-searchable="herd immunity community protection vaccination rates">
+                        <div class="card-body">
+                            <div style="background: linear-gradient(135deg, var(--accent-500), var(--success-500)); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                                <i class="fas fa-users" style="color: white; font-size: 1.5rem;"></i>
+                            </div>
+                            <h3 class="card-title">Herd Immunity</h3>
+                            <p class="card-text">When enough people in a community are vaccinated, it creates protection for everyone, including those who cannot be vaccinated due to medical reasons.</p>
+                            <button class="btn btn-outline" onclick="showDetails('herd-immunity')">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Safety & Side Effects -->
+            <div class="education-category" data-category="safety">
+                <h2 style="font-size: 2rem; font-weight: 600; color: var(--gray-800); margin-bottom: 2rem; text-align: center;">
+                    <i class="fas fa-shield-alt" style="color: var(--success-500); margin-right: 0.5rem;"></i>
+                    Vaccine Safety
+                </h2>
+                
+                <div class="grid grid-2 mb-4">
+                    <div class="card education-card" data-searchable="vaccine safety testing clinical trials FDA approval">
+                        <div class="card-body">
+                            <div class="flex-between mb-2">
+                                <h3 class="card-title">Safety Testing</h3>
+                                <i class="fas fa-check-circle" style="color: var(--success-500); font-size: 1.5rem;"></i>
+                            </div>
+                            <p class="card-text">Vaccines undergo rigorous testing in multiple phases before approval. They are continuously monitored for safety even after approval.</p>
+                            <ul style="color: var(--gray-600); margin: 1rem 0;">
+                                <li>Pre-clinical laboratory testing</li>
+                                <li>Phase I, II, and III clinical trials</li>
+                                <li>FDA review and approval</li>
+                                <li>Ongoing safety monitoring</li>
+                            </ul>
+                            <button class="btn btn-outline" onclick="showDetails('safety-testing')">Learn More</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card education-card" data-searchable="side effects reactions mild serious adverse events">
+                        <div class="card-body">
+                            <div class="flex-between mb-2">
+                                <h3 class="card-title">Side Effects</h3>
+                                <i class="fas fa-thermometer-half" style="color: var(--warning-500); font-size: 1.5rem;"></i>
+                            </div>
+                            <p class="card-text">Most vaccine side effects are mild and temporary. Serious adverse reactions are extremely rare.</p>
+                            <div class="grid grid-2" style="margin: 1rem 0; gap: 1rem;">
+                                <div>
+                                    <h4 style="color: var(--success-500); font-size: 1rem; margin-bottom: 0.5rem;">Common (Mild)</h4>
+                                    <ul style="color: var(--gray-600); font-size: 0.9rem;">
+                                        <li>Soreness at injection site</li>
+                                        <li>Low-grade fever</li>
+                                        <li>Mild fussiness</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 style="color: var(--error-500); font-size: 1rem; margin-bottom: 0.5rem;">Rare (Serious)</h4>
+                                    <ul style="color: var(--gray-600); font-size: 0.9rem;">
+                                        <li>Severe allergic reaction</li>
+                                        <li>High fever (over 104°F)</li>
+                                        <li>Prolonged crying</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline" onclick="showDetails('side-effects')">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vaccination Schedule -->
+            <div class="education-category" data-category="schedule">
+                <h2 style="font-size: 2rem; font-weight: 600; color: var(--gray-800); margin-bottom: 2rem; text-align: center;">
+                    <i class="fas fa-calendar-alt" style="color: var(--accent-500); margin-right: 0.5rem;"></i>
+                    Vaccination Schedule
+                </h2>
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3 style="margin-bottom: 1rem;">Why Follow the Recommended Schedule?</h3>
+                        <div class="grid grid-3" style="margin-bottom: 2rem;">
+                            <div class="text-center">
+                                <i class="fas fa-clock" style="color: var(--primary-500); font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                                <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Optimal Timing</h4>
+                                <p style="color: var(--gray-600); font-size: 0.9rem;">Vaccines are scheduled when your child's immune system can best respond and when they're most vulnerable to diseases.</p>
+                            </div>
+                            <div class="text-center">
+                                <i class="fas fa-baby" style="color: var(--secondary-500); font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                                <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Early Protection</h4>
+                                <p style="color: var(--gray-600); font-size: 0.9rem;">Starting vaccines early protects infants when they're most vulnerable to serious complications from diseases.</p>
+                            </div>
+                            <div class="text-center">
+                                <i class="fas fa-shield-alt" style="color: var(--success-500); font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                                <h4 style="font-size: 1rem; margin-bottom: 0.5rem;">Complete Immunity</h4>
+                                <p style="color: var(--gray-600); font-size: 0.9rem;">Following the full schedule ensures your child develops complete, long-lasting immunity.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Age</th>
+                                        <th>Vaccines</th>
+                                        <th>Why This Age?</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Birth</strong></td>
+                                        <td>Hepatitis B, BCG</td>
+                                        <td>Protects from birth against serious liver disease and tuberculosis</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>2 months</strong></td>
+                                        <td>DPT, Polio, Hib</td>
+                                        <td>First doses when maternal antibodies begin to fade</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>4 months</strong></td>
+                                        <td>DPT, Polio, Hib</td>
+                                        <td>Second doses to build stronger immunity</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>6 months</strong></td>
+                                        <td>DPT, Polio, Hib</td>
+                                        <td>Third doses complete the primary series</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>12 months</strong></td>
+                                        <td>MMR, Varicella</td>
+                                        <td>When immune system can respond to live vaccines effectively</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diseases Prevented -->
+            <div class="education-category" data-category="diseases">
+                <h2 style="font-size: 2rem; font-weight: 600; color: var(--gray-800); margin-bottom: 2rem; text-align: center;">
+                    <i class="fas fa-virus-slash" style="color: var(--error-500); margin-right: 0.5rem;"></i>
+                    Diseases Prevented by Vaccines
+                </h2>
+                
+                <div class="grid grid-2 mb-4">
+                    <div class="card">
+                        <div class="card-header" style="background: linear-gradient(135deg, var(--error-50), var(--warning-50));">
+                            <h3 class="card-title" style="color: var(--error-700);">Serious Diseases</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="disease-list">
+                                <div class="disease-item">
+                                    <div class="flex-between mb-2">
+                                        <h4 style="color: var(--gray-800);">Measles</h4>
+                                        <span class="badge badge-error">Highly Contagious</span>
+                                    </div>
+                                    <p style="color: var(--gray-600); font-size: 0.9rem; margin-bottom: 1rem;">Can cause brain damage, pneumonia, and death. Before vaccines, killed 2.6 million children annually worldwide.</p>
+                                </div>
+                                
+                                <div class="disease-item">
+                                    <div class="flex-between mb-2">
+                                        <h4 style="color: var(--gray-800);">Polio</h4>
+                                        <span class="badge badge-error">Paralysis</span>
+                                    </div>
+                                    <p style="color: var(--gray-600); font-size: 0.9rem; margin-bottom: 1rem;">Can cause permanent paralysis and death. Thanks to vaccines, it's been eliminated from most countries.</p>
+                                </div>
+                                
+                                <div class="disease-item">
+                                    <div class="flex-between mb-2">
+                                        <h4 style="color: var(--gray-800);">Whooping Cough</h4>
+                                        <span class="badge badge-warning">Dangerous for Infants</span>
+                                    </div>
+                                    <p style="color: var(--gray-600); font-size: 0.9rem;">Can cause severe breathing problems, especially in babies under 6 months old.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header" style="background: linear-gradient(135deg, var(--success-50), var(--secondary-50));">
+                            <h3 class="card-title" style="color: var(--success-700);">Success Stories</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="success-stats">
+                                <div class="stat-item mb-3">
+                                    <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                        <i class="fas fa-chart-line" style="color: var(--success-500); margin-right: 0.5rem;"></i>
+                                        <h4 style="color: var(--gray-800); font-size: 1rem;">Smallpox</h4>
+                                    </div>
+                                    <p style="color: var(--gray-600); font-size: 0.9rem;">Completely eradicated worldwide through vaccination - the first disease ever eliminated by vaccines.</p>
+                                </div>
+                                
+                                <div class="stat-item mb-3">
+                                    <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                        <i class="fas fa-arrow-down" style="color: var(--success-500); margin-right: 0.5rem;"></i>
+                                        <h4 style="color: var(--gray-800); font-size: 1rem;">Measles Deaths</h4>
+                                    </div>
+                                    <p style="color: var(--gray-600); font-size: 0.9rem;">Decreased by 73% between 2000-2018 due to vaccination programs, preventing over 21 million deaths.</p>
+                                </div>
+                                
+                                <div class="stat-item">
+                                    <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                        <i class="fas fa-globe" style="color: var(--success-500); margin-right: 0.5rem;"></i>
+                                        <h4 style="color: var(--gray-800); font-size: 1rem;">Polio</h4>
+                                    </div>
+                                    <p style="color: var(--gray-600); font-size: 0.9rem;">Cases reduced by over 99% since 1988, from 350,000 to just a few hundred cases per year.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Myths vs Facts -->
+            <div class="education-category" data-category="myths">
+                <h2 style="font-size: 2rem; font-weight: 600; color: var(--gray-800); margin-bottom: 2rem; text-align: center;">
+                    <i class="fas fa-fact-check" style="color: var(--secondary-500); margin-right: 0.5rem;"></i>
+                    Myths vs Facts
+                </h2>
+                
+                <div class="myths-facts-container">
+                    <div class="myth-fact-item mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="grid grid-2" style="gap: 2rem;">
+                                    <div class="myth-section">
+                                        <h3 style="color: var(--error-500); margin-bottom: 1rem;">
+                                            <i class="fas fa-times-circle"></i> MYTH
+                                        </h3>
+                                        <p style="background: var(--error-50); padding: 1rem; border-radius: var(--border-radius); border-left: 4px solid var(--error-500);">
+                                            "Vaccines cause autism"
+                                        </p>
+                                    </div>
+                                    <div class="fact-section">
+                                        <h3 style="color: var(--success-500); margin-bottom: 1rem;">
+                                            <i class="fas fa-check-circle"></i> FACT
+                                        </h3>
+                                        <p style="background: var(--success-50); padding: 1rem; border-radius: var(--border-radius); border-left: 4px solid var(--success-500);">
+                                            Multiple large-scale studies involving millions of children have found no link between vaccines and autism. The original study making this claim was fraudulent and has been retracted.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="myth-fact-item mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="grid grid-2" style="gap: 2rem;">
+                                    <div class="myth-section">
+                                        <h3 style="color: var(--error-500); margin-bottom: 1rem;">
+                                            <i class="fas fa-times-circle"></i> MYTH
+                                        </h3>
+                                        <p style="background: var(--error-50); padding: 1rem; border-radius: var(--border-radius); border-left: 4px solid var(--error-500);">
+                                            "Natural immunity is better than vaccine immunity"
+                                        </p>
+                                    </div>
+                                    <div class="fact-section">
+                                        <h3 style="color: var(--success-500); margin-bottom: 1rem;">
+                                            <i class="fas fa-check-circle"></i> FACT
+                                        </h3>
+                                        <p style="background: var(--success-50); padding: 1rem; border-radius: var(--border-radius); border-left: 4px solid var(--success-500);">
+                                            While natural infection can provide immunity, it comes with serious risks including death, disability, and complications. Vaccines provide immunity without these risks.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="myth-fact-item mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="grid grid-2" style="gap: 2rem;">
+                                    <div class="myth-section">
+                                        <h3 style="color: var(--error-500); margin-bottom: 1rem;">
+                                            <i class="fas fa-times-circle"></i> MYTH
+                                        </h3>
+                                        <p style="background: var(--error-50); padding: 1rem; border-radius: var(--border-radius); border-left: 4px solid var(--error-500);">
+                                            "Too many vaccines overwhelm the immune system"
+                                        </p>
+                                    </div>
+                                    <div class="fact-section">
+                                        <h3 style="color: var(--success-500); margin-bottom: 1rem;">
+                                            <i class="fas fa-check-circle"></i> FACT
+                                        </h3>
+                                        <p style="background: var(--success-50); padding: 1rem; border-radius: var(--border-radius); border-left: 4px solid var(--success-500);">
+                                            A child's immune system can handle thousands of vaccines at once. The current vaccine schedule uses only a tiny fraction of the immune system's capacity.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-external-link-alt" style="color: var(--accent-500); margin-right: 0.5rem;"></i>
+                        Trusted Resources
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="grid grid-3">
+                        <div class="resource-item">
+                            <h4 style="color: var(--primary-600); margin-bottom: 0.5rem;">
+                                <i class="fas fa-globe"></i> WHO
+                            </h4>
+                            <p style="color: var(--gray-600); font-size: 0.9rem;">World Health Organization - Global vaccine information and guidelines</p>
+                        </div>
+                        <div class="resource-item">
+                            <h4 style="color: var(--primary-600); margin-bottom: 0.5rem;">
+                                <i class="fas fa-shield-alt"></i> CDC
+                            </h4>
+                            <p style="color: var(--gray-600); font-size: 0.9rem;">Centers for Disease Control - Vaccine safety and effectiveness data</p>
+                        </div>
+                        <div class="resource-item">
+                            <h4 style="color: var(--primary-600); margin-bottom: 0.5rem;">
+                                <i class="fas fa-user-md"></i> AAP
+                            </h4>
+                            <p style="color: var(--gray-600); font-size: 0.9rem;">American Academy of Pediatrics - Pediatric vaccine recommendations</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!-- Detail Modal -->
+    <div id="detailModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2 id="modalTitle">Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script src="utils.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            setupEventListeners();
+        });
+        
+        function setupEventListeners() {
+            document.getElementById('searchInput').addEventListener('input', debounce(filterContent, 300));
+            document.getElementById('categoryFilter').addEventListener('change', filterContent);
+            
+            // Modal functionality
+            document.addEventListener('click', (e) => {
+                const modal = document.getElementById('detailModal');
+                if (e.target.classList.contains('modal-close') || e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+        
+        function filterContent() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            
+            // Filter categories
+            const categories = document.querySelectorAll('.education-category');
+            categories.forEach(categoryEl => {
+                const categoryName = categoryEl.getAttribute('data-category');
+                const shouldShowCategory = !category || category === categoryName;
+                categoryEl.style.display = shouldShowCategory ? 'block' : 'none';
+            });
+            
+            // Filter cards within visible categories
+            const cards = document.querySelectorAll('.education-card');
+            cards.forEach(card => {
+                const searchableText = card.getAttribute('data-searchable') || '';
+                const cardText = card.textContent.toLowerCase();
+                const matchesSearch = !searchTerm || 
+                    searchableText.includes(searchTerm) || 
+                    cardText.includes(searchTerm);
+                
+                const parentCategory = card.closest('.education-category');
+                const parentVisible = parentCategory && parentCategory.style.display !== 'none';
+                
+                card.style.display = (matchesSearch && parentVisible) ? 'block' : 'none';
+            });
+        }
+        
+        function showDetails(topic) {
+            const modal = document.getElementById('detailModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            let title = '';
+            let content = '';
+            
+            switch (topic) {
+                case 'vaccines-basics':
+                    title = 'What Are Vaccines?';
+                    content = `
+                        <div>
+                            <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">Vaccines are one of the most important tools in preventing infectious diseases and protecting public health.</p>
+                            
+                            <h3 style="color: var(--primary-600); margin-bottom: 1rem;">Types of Vaccines</h3>
+                            <ul style="margin-bottom: 1.5rem; line-height: 1.8;">
+                                <li><strong>Live Attenuated:</strong> Contain a weakened version of the living virus or bacteria (MMR, Varicella)</li>
+                                <li><strong>Inactivated:</strong> Contain killed versions of the pathogen (Polio, Hepatitis A)</li>
+                                <li><strong>Subunit/Conjugate:</strong> Contain only pieces of the pathogen (Hepatitis B, Hib)</li>
+                                <li><strong>Toxoid:</strong> Contain inactivated toxins produced by bacteria (Tetanus, Diphtheria)</li>
+                            </ul>
+                            
+                            <h3 style="color: var(--primary-600); margin-bottom: 1rem;">How They're Made</h3>
+                            <p style="margin-bottom: 1rem;">Vaccines undergo a complex manufacturing process that includes:</p>
+                            <ul style="line-height: 1.8;">
+                                <li>Growing the antigen (virus or bacteria) in laboratories</li>
+                                <li>Purifying and inactivating the pathogen</li>
+                                <li>Adding stabilizers and preservatives</li>
+                                <li>Rigorous quality control testing</li>
+                            </ul>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'how-vaccines-work':
+                    title = 'How Do Vaccines Work?';
+                    content = `
+                        <div>
+                            <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">Vaccines work by training your immune system to recognize and fight specific diseases without causing the actual illness.</p>
+                            
+                            <h3 style="color: var(--secondary-600); margin-bottom: 1rem;">The Immune Response Process</h3>
+                            <div style="background: var(--gray-50); padding: 1.5rem; border-radius: var(--border-radius); margin-bottom: 1.5rem;">
+                                <ol style="line-height: 1.8;">
+                                    <li><strong>Recognition:</strong> Immune cells detect the vaccine antigens as foreign substances</li>
+                                    <li><strong>Activation:</strong> B-cells and T-cells are activated to fight the perceived threat</li>
+                                    <li><strong>Antibody Production:</strong> B-cells produce antibodies specific to that pathogen</li>
+                                    <li><strong>Memory Formation:</strong> Memory cells remember the pathogen for future encounters</li>
+                                    <li><strong>Future Protection:</strong> If exposed to the real disease, memory cells quickly produce antibodies</li>
+                                </ol>
+                            </div>
+                            
+                            <h3 style="color: var(--secondary-600); margin-bottom: 1rem;">Duration of Protection</h3>
+                            <p>Different vaccines provide different durations of protection:</p>
+                            <ul style="line-height: 1.8;">
+                                <li><strong>Lifelong:</strong> Measles, mumps, rubella</li>
+                                <li><strong>Many years:</strong> Hepatitis B, varicella</li>
+                                <li><strong>Requires boosters:</strong> Tetanus, diphtheria, pertussis</li>
+                                <li><strong>Annual:</strong> Influenza (due to virus mutations)</li>
+                            </ul>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'herd-immunity':
+                    title = 'Understanding Herd Immunity';
+                    content = `
+                        <div>
+                            <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">Herd immunity occurs when a large portion of a community becomes immune to a disease, making its spread unlikely.</p>
+                            
+                            <h3 style="color: var(--success-600); margin-bottom: 1rem;">How It Works</h3>
+                            <div style="background: var(--success-50); padding: 1.5rem; border-radius: var(--border-radius); margin-bottom: 1.5rem;">
+                                <p style="margin-bottom: 1rem;">When enough people are vaccinated, the chain of infection is broken. This protects:</p>
+                                <ul style="line-height: 1.8;">
+                                    <li>Newborns too young to be vaccinated</li>
+                                    <li>People with compromised immune systems</li>
+                                    <li>Those who cannot be vaccinated due to medical reasons</li>
+                                    <li>The small percentage for whom vaccines don't work</li>
+                                </ul>
+                            </div>
+                            
+                            <h3 style="color: var(--success-600); margin-bottom: 1rem;">Vaccination Thresholds</h3>
+                            <p>Different diseases require different vaccination rates for herd immunity:</p>
+                            <ul style="line-height: 1.8;">
+                                <li><strong>Measles:</strong> 95% (highly contagious)</li>
+                                <li><strong>Polio:</strong> 80-85%</li>
+                                <li><strong>Rubella:</strong> 85%</li>
+                                <li><strong>Diphtheria:</strong> 85%</li>
+                            </ul>
+                            
+                            <div style="background: var(--warning-50); padding: 1rem; border-radius: var(--border-radius); border-left: 4px solid var(--warning-500); margin-top: 1.5rem;">
+                                <p><strong>Important:</strong> When vaccination rates drop below these thresholds, outbreaks can occur, putting vulnerable populations at risk.</p>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'safety-testing':
+                    title = 'Vaccine Safety Testing';
+                    content = `
+                        <div>
+                            <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">Vaccines undergo extensive testing before approval and continuous monitoring after approval to ensure safety.</p>
+                            
+                            <h3 style="color: var(--primary-600); margin-bottom: 1rem;">Pre-Market Testing Phases</h3>
+                            <div style="margin-bottom: 1.5rem;">
+                                <div style="background: var(--gray-50); padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                                    <h4 style="color: var(--primary-600);">Pre-clinical Testing</h4>
+                                    <p>Laboratory and animal studies to evaluate basic safety and immune response</p>
+                                </div>
+                                <div style="background: var(--gray-50); padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                                    <h4 style="color: var(--primary-600);">Phase I (20-100 people)</h4>
+                                    <p>First human testing focusing on safety and dosage</p>
+                                </div>
+                                <div style="background: var(--gray-50); padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                                    <h4 style="color: var(--primary-600);">Phase II (100-1,000 people)</h4>
+                                    <p>Expanded safety testing and immune response evaluation</p>
+                                </div>
+                                <div style="background: var(--gray-50); padding: 1rem; border-radius: var(--border-radius);">
+                                    <h4 style="color: var(--primary-600);">Phase III (1,000-30,000 people)</h4>
+                                    <p>Large-scale testing for effectiveness and monitoring for rare side effects</p>
+                                </div>
+                            </div>
+                            
+                            <h3 style="color: var(--primary-600); margin-bottom: 1rem;">Post-Market Surveillance</h3>
+                            <ul style="line-height: 1.8;">
+                                <li><strong>VAERS:</strong> Vaccine Adverse Event Reporting System</li>
+                                <li><strong>VSD:</strong> Vaccine Safety Datalink</li>
+                                <li><strong>CISA:</strong> Clinical Immunization Safety Assessment</li>
+                                <li><strong>PRISM:</strong> Post-licensure Rapid Immunization Safety Monitoring</li>
+                            </ul>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'side-effects':
+                    title = 'Understanding Vaccine Side Effects';
+                    content = `
+                        <div>
+                            <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">Understanding potential side effects helps parents make informed decisions and know what to expect after vaccination.</p>
+                            
+                            <h3 style="color: var(--success-600); margin-bottom: 1rem;">Common Side Effects (Very Common)</h3>
+                            <div style="background: var(--success-50); padding: 1.5rem; border-radius: var(--border-radius); margin-bottom: 1.5rem;">
+                                <ul style="line-height: 1.8;">
+                                    <li><strong>Local reactions:</strong> Pain, redness, swelling at injection site</li>
+                                    <li><strong>Systemic reactions:</strong> Low-grade fever, fussiness, drowsiness</li>
+                                    <li><strong>Duration:</strong> Usually resolve within 1-2 days</li>
+                                    <li><strong>Treatment:</strong> Cool compress, acetaminophen if needed</li>
+                                </ul>
+                            </div>
+                            
+                            <h3 style="color: var(--warning-600); margin-bottom: 1rem;">Moderate Side Effects (Uncommon)</h3>
+                            <div style="background: var(--warning-50); padding: 1.5rem; border-radius: var(--border-radius); margin-bottom: 1.5rem;">
+                                <ul style="line-height: 1.8;">
+                                    <li><strong>High fever:</strong> Over 102°F (39°C)</li>
+                                    <li><strong>Prolonged crying:</strong> More than 3 hours</li>
+                                    <li><strong>Extensive swelling:</strong> Entire arm or leg</li>
+                                    <li><strong>Action:</strong> Contact healthcare provider</li>
+                                </ul>
+                            </div>
+                            
+                            <h3 style="color: var(--error-600); margin-bottom: 1rem;">Serious Side Effects (Very Rare)</h3>
+                            <div style="background: var(--error-50); padding: 1.5rem; border-radius: var(--border-radius); margin-bottom: 1.5rem;">
+                                <ul style="line-height: 1.8;">
+                                    <li><strong>Severe allergic reaction:</strong> 1 in a million doses</li>
+                                    <li><strong>Febrile seizures:</strong> 1 in 3,000-4,000 children</li>
+                                    <li><strong>Intussusception:</strong> Very rare with rotavirus vaccine</li>
+                                    <li><strong>Action:</strong> Seek immediate medical attention</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="background: var(--primary-50); padding: 1rem; border-radius: var(--border-radius); border-left: 4px solid var(--primary-500);">
+                                <p><strong>Remember:</strong> The risks from vaccines are far smaller than the risks from the diseases they prevent.</p>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                default:
+                    title = 'Information';
+                    content = '<p>Detailed information coming soon...</p>';
+            }
+            
+            modalTitle.textContent = title;
+            modalBody.innerHTML = content;
+            modal.style.display = 'flex';
+        }
+    </script>
+    
+    <style>
+        .education-card {
+            transition: var(--transition-slow);
+        }
+        
+        .education-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .disease-item {
+            border-bottom: 1px solid var(--gray-200);
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .disease-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .stat-item {
+            border-bottom: 1px solid var(--gray-200);
+            padding-bottom: 1rem;
+        }
+        
+        .stat-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .resource-item {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-xl);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray-500);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+        
+        .modal-close:hover {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+            line-height: 1.7;
+        }
+    </style>
+</body>
+</html>

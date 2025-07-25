@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline Mode - ImmunTracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <i class="fas fa-shield-alt"></i>
+                ImmunTracker
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="register-child.html">Register Child</a></li>
+                <li><a href="view-records.html">View Records</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="offline.html">Offline</a></li>
+            </ul>
+            <button class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="section">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h1 style="font-size: 2.5rem; font-weight: 700; color: var(--gray-800); margin-bottom: 1rem;">
+                    Offline Access
+                </h1>
+                <p style="font-size: 1.125rem; color: var(--gray-600);">
+                    Access your immunization data even when you're not connected to the internet
+                </p>
+            </div>
+
+            <!-- Connection Status -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="flex-center" style="flex-direction: column; text-align: center;">
+                        <div id="connectionStatus" class="connection-indicator">
+                            <!-- Status will be updated by JavaScript -->
+                        </div>
+                        <div id="lastSyncTime" style="color: var(--gray-600); font-size: 0.9rem; margin-top: 0.5rem;">
+                            <!-- Last sync time will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Offline Features -->
+            <div class="grid grid-2 mb-4">
+                <!-- Cached Data -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-database" style="color: var(--primary-500); margin-right: 0.5rem;"></i>
+                            Cached Data
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="cachedDataInfo">
+                            <!-- Cached data information will be loaded here -->
+                        </div>
+                        <div class="flex" style="gap: 0.5rem; margin-top: 1rem;">
+                            <button id="refreshCacheBtn" class="btn btn-primary">
+                                <i class="fas fa-sync"></i>
+                                Update Cache
+                            </button>
+                            <button id="clearCacheBtn" class="btn btn-outline">
+                                <i class="fas fa-trash"></i>
+                                Clear Cache
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sync Status -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-cloud-upload-alt" style="color: var(--secondary-500); margin-right: 0.5rem;"></i>
+                            Sync Status
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="syncStatus">
+                            <!-- Sync status will be loaded here -->
+                        </div>
+                        <div class="flex" style="gap: 0.5rem; margin-top: 1rem;">
+                            <button id="forceSyncBtn" class="btn btn-secondary">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                Force Sync
+                            </button>
+                            <button id="autoSyncToggle" class="btn btn-outline">
+                                <i class="fas fa-toggle-on"></i>
+                                Auto Sync: ON
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Offline Functionality -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-wifi-slash" style="color: var(--accent-500); margin-right: 0.5rem;"></i>
+                        What Works Offline?
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="grid grid-2" style="gap: 2rem;">
+                        <div>
+                            <h4 style="color: var(--success-500); margin-bottom: 1rem;">
+                                <i class="fas fa-check-circle"></i> Available Offline
+                            </h4>
+                            <ul style="color: var(--gray-700); line-height: 1.8;">
+                                <li>View cached child records</li>
+                                <li>Browse vaccination schedules</li>
+                                <li>Read educational content</li>
+                                <li>View basic statistics</li>
+                                <li>Print vaccination schedules</li>
+                                <li>Access contact information</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--warning-500); margin-bottom: 1rem;">
+                                <i class="fas fa-wifi"></i> Requires Internet
+                            </h4>
+                            <ul style="color: var(--gray-700); line-height: 1.8;">
+                                <li>Register new children</li>
+                                <li>Record new vaccinations</li>
+                                <li>Update existing records</li>
+                                <li>Real-time dashboard data</li>
+                                <li>Sync across devices</li>
+                                <li>Backup to cloud</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cached Children (Offline Access) -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="flex-between">
+                        <h3 class="card-title">
+                            <i class="fas fa-baby" style="color: var(--primary-500); margin-right: 0.5rem;"></i>
+                            Cached Children Records
+                        </h3>
+                        <span id="cachedCount" class="badge badge-secondary">0 cached</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="cachedChildren">
+                        <!-- Cached children will be displayed here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips for Offline Use -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-lightbulb" style="color: var(--accent-500); margin-right: 0.5rem;"></i>
+                        Tips for Offline Use
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="grid grid-2" style="gap: 2rem;">
+                        <div>
+                            <h4 style="color: var(--primary-600); margin-bottom: 1rem;">Before Going Offline</h4>
+                            <ul style="color: var(--gray-700); line-height: 1.8;">
+                                <li>Update your cache with latest data</li>
+                                <li>Download vaccination schedules</li>
+                                <li>Export important records as PDF</li>
+                                <li>Ensure auto-sync is enabled</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--secondary-600); margin-bottom: 1rem;">When Back Online</h4>
+                            <ul style="color: var(--gray-700); line-height: 1.8;">
+                                <li>Allow automatic synchronization</li>
+                                <li>Check for data conflicts</li>
+                                <li>Update any pending changes</li>
+                                <li>Refresh your local cache</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--primary-50); padding: 1rem; border-radius: var(--border-radius); border-left: 4px solid var(--primary-500); margin-top: 1.5rem;">
+                        <p style="color: var(--primary-700); margin: 0;">
+                            <strong>Pro Tip:</strong> Keep the app open in your browser for the best offline experience. Browser caching works most effectively when the app remains active.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+    <script src="config.js"></script>
+    <script src="firebase-utils.js"></script>
+    <script src="utils.js"></script>
+    <script>
+        let isOnline = navigator.onLine;
+        let autoSync = storage.get('autoSync') !== false; // Default to true
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeOfflinePage();
+            setupEventListeners();
+            updateConnectionStatus();
+            loadCachedData();
+        });
+        
+        function setupEventListeners() {
+            // Network status events
+            window.addEventListener('online', handleOnline);
+            window.addEventListener('offline', handleOffline);
+            
+            // Button events
+            document.getElementById('refreshCacheBtn').addEventListener('click', refreshCache);
+            document.getElementById('clearCacheBtn').addEventListener('click', clearCache);
+            document.getElementById('forceSyncBtn').addEventListener('click', forceSync);
+            document.getElementById('autoSyncToggle').addEventListener('click', toggleAutoSync);
+        }
+        
+        function initializeOfflinePage() {
+            // Set last sync time
+            const lastSync = storage.get('lastSync');
+            const lastSyncElement = document.getElementById('lastSyncTime');
+            
+            if (lastSync) {
+                const syncDate = new Date(lastSync);
+                lastSyncElement.textContent = `Last sync: ${syncDate.toLocaleString()}`;
+            } else {
+                lastSyncElement.textContent = 'Never synced';
+            }
+            
+            // Update auto-sync button
+            updateAutoSyncButton();
+        }
+        
+        function handleOnline() {
+            isOnline = true;
+            updateConnectionStatus();
+            if (autoSync) {
+                forceSync();
+            }
+        }
+        
+        function handleOffline() {
+            isOnline = false;
+            updateConnectionStatus();
+        }
+        
+        function updateConnectionStatus() {
+            const statusElement = document.getElementById('connectionStatus');
+            
+            if (isOnline) {
+                statusElement.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; color: var(--success-500);">
+                        <i class="fas fa-wifi" style="font-size: 2rem;"></i>
+                        <div>
+                            <div style="font-size: 1.25rem; font-weight: 600;">Online</div>
+                            <div style="font-size: 0.9rem;">Connected to internet</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                statusElement.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; color: var(--error-500);">
+                        <i class="fas fa-wifi-slash" style="font-size: 2rem;"></i>
+                        <div>
+                            <div style="font-size: 1.25rem; font-weight: 600;">Offline</div>
+                            <div style="font-size: 0.9rem;">Using cached data</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Update button states
+            const refreshBtn = document.getElementById('refreshCacheBtn');
+            const forceSyncBtn = document.getElementById('forceSyncBtn');
+            
+            refreshBtn.disabled = !isOnline;
+            forceSyncBtn.disabled = !isOnline;
+            
+            if (!isOnline) {
+                refreshBtn.classList.add('btn-disabled');
+                forceSyncBtn.classList.add('btn-disabled');
+            } else {
+                refreshBtn.classList.remove('btn-disabled');
+                forceSyncBtn.classList.remove('btn-disabled');
+            }
+        }
+        
+        async function loadCachedData() {
+            const cachedDataElement = document.getElementById('cachedDataInfo');
+            const cachedChildrenElement = document.getElementById('cachedChildren');
+            const cachedCountElement = document.getElementById('cachedCount');
+            
+            // Load cached children
+            const cachedChildren = storage.get('cachedChildren') || [];
+            const cachedVaccinations = storage.get('cachedVaccinations') || [];
+            
+            // Update cached data info
+            cachedDataElement.innerHTML = `
+                <div class="grid grid-2" style="gap: 1rem; text-align: center;">
+                    <div>
+                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--primary-600);">${cachedChildren.length}</div>
+                        <div style="color: var(--gray-600); font-size: 0.9rem;">Children</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--secondary-600);">${cachedVaccinations.length}</div>
+                        <div style="color: var(--gray-600); font-size: 0.9rem;">Vaccinations</div>
+                    </div>
+                </div>
+            `;
+            
+            // Update cached count badge
+            cachedCountElement.textContent = `${cachedChildren.length} cached`;
+            
+            // Display cached children
+            if (cachedChildren.length === 0) {
+                cachedChildrenElement.innerHTML = `
+                    <div class="text-center" style="padding: 2rem; color: var(--gray-500);">
+                        <i class="fas fa-database" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <p>No cached data available</p>
+                        <p style="font-size: 0.9rem;">Connect to internet and update cache to view offline</p>
+                    </div>
+                `;
+            } else {
+                cachedChildrenElement.innerHTML = cachedChildren.map(child => {
+                    const childVaccinations = cachedVaccinations.filter(v => v.childId === child.id);
+                    const completedVaccinations = childVaccinations.filter(v => v.administered).length;
+                    
+                    return `
+                        <div class="card mb-2">
+                            <div class="card-body">
+                                <div class="flex-between">
+                                    <div>
+                                        <h4 style="margin-bottom: 0.5rem;">${child.firstName} ${child.lastName}</h4>
+                                        <p style="color: var(--gray-600); margin: 0; font-size: 0.9rem;">
+                                            Age: ${utils.calculateAge(child.dateOfBirth)} • 
+                                            Vaccinations: ${completedVaccinations}
+                                        </p>
+                                    </div>
+                                    <div class="flex" style="gap: 0.5rem;">
+                                        <button onclick="viewOfflineChild('${child.id}')" class="btn btn-outline" style="font-size: 0.8rem; padding: 0.5rem;">
+                                            <i class="fas fa-eye"></i>
+                                            View
+                                        </button>
+                                        <button onclick="printOfflineSchedule('${child.id}')" class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.5rem;">
+                                            <i class="fas fa-print"></i>
+                                            Print
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            // Update sync status
+            updateSyncStatus();
+        }
+        
+        function updateSyncStatus() {
+            const syncStatusElement = document.getElementById('syncStatus');
+            const pendingChanges = storage.get('pendingChanges') || [];
+            const lastSync = storage.get('lastSync');
+            
+            let statusHTML = '';
+            
+            if (pendingChanges.length > 0) {
+                statusHTML = `
+                    <div style="color: var(--warning-600); margin-bottom: 1rem;">
+                        <i class="fas fa-clock"></i> ${pendingChanges.length} pending changes
+                    </div>
+                `;
+            } else {
+                statusHTML = `
+                    <div style="color: var(--success-600); margin-bottom: 1rem;">
+                        <i class="fas fa-check"></i> All data synchronized
+                    </div>
+                `;
+            }
+            
+            if (lastSync) {
+                const syncDate = new Date(lastSync);
+                const timeDiff = Date.now() - syncDate.getTime();
+                const hoursDiff = Math.floor(timeDiff / (1000 * 60 * 60));
+                
+                statusHTML += `
+                    <div style="color: var(--gray-600); font-size: 0.9rem;">
+                        Last successful sync: ${hoursDiff < 1 ? 'Less than an hour ago' : `${hoursDiff} hours ago`}
+                    </div>
+                `;
+            }
+            
+            syncStatusElement.innerHTML = statusHTML;
+        }
+        
+        async function refreshCache() {
+            if (!isOnline) {
+                utils.showError(document.querySelector('.container'), 'Cannot refresh cache while offline');
+                return;
+            }
+            
+            const refreshBtn = document.getElementById('refreshCacheBtn');
+            const originalText = refreshBtn.innerHTML;
+            refreshBtn.innerHTML = '<div class="loading"></div> Updating...';
+            refreshBtn.disabled = true;
+            
+            try {
+                // Load fresh data from Firebase
+                const [childrenResult, vaccinationsResult] = await Promise.all([
+                    childOperations.getAllChildren(),
+                    vaccinationOperations.getAllVaccinations()
+                ]);
+                
+                if (childrenResult.success && vaccinationsResult.success) {
+                    // Cache the data
+                    storage.set('cachedChildren', childrenResult.data);
+                    storage.set('cachedVaccinations', vaccinationsResult.data);
+                    storage.set('lastSync', Date.now());
+                    
+                    utils.showSuccess('Cache updated successfully!');
+                    loadCachedData();
+                } else {
+                    throw new Error('Failed to fetch data from server');
+                }
+            } catch (error) {
+                console.error('Cache refresh error:', error);
+                utils.showError(document.querySelector('.container'), `Failed to update cache: ${error.message}`);
+            } finally {
+                refreshBtn.innerHTML = originalText;
+                refreshBtn.disabled = false;
+            }
+        }
+        
+        function clearCache() {
+            if (confirm('Are you sure you want to clear all cached data? This will remove offline access to your data.')) {
+                storage.remove('cachedChildren');
+                storage.remove('cachedVaccinations');
+                storage.remove('lastSync');
+                storage.remove('pendingChanges');
+                
+                utils.showSuccess('Cache cleared successfully!');
+                loadCachedData();
+            }
+        }
+        
+        async function forceSync() {
+            if (!isOnline) {
+                utils.showError(document.querySelector('.container'), 'Cannot sync while offline');
+                return;
+            }
+            
+            const syncBtn = document.getElementById('forceSyncBtn');
+            const originalText = syncBtn.innerHTML;
+            syncBtn.innerHTML = '<div class="loading"></div> Syncing...';
+            syncBtn.disabled = true;
+            
+            try {
+                // For now, just refresh the cache
+                await refreshCache();
+                utils.showSuccess('Sync completed!');
+            } catch (error) {
+                console.error('Sync error:', error);
+                utils.showError(document.querySelector('.container'), `Sync failed: ${error.message}`);
+            } finally {
+                syncBtn.innerHTML = originalText;
+                syncBtn.disabled = false;
+            }
+        }
+        
+        function toggleAutoSync() {
+            autoSync = !autoSync;
+            storage.set('autoSync', autoSync);
+            updateAutoSyncButton();
+            
+            const status = autoSync ? 'enabled' : 'disabled';
+            utils.showSuccess(`Auto-sync ${status}!`);
+        }
+        
+        function updateAutoSyncButton() {
+            const toggleBtn = document.getElementById('autoSyncToggle');
+            if (autoSync) {
+                toggleBtn.innerHTML = '<i class="fas fa-toggle-on"></i> Auto Sync: ON';
+                toggleBtn.style.color = 'var(--success-600)';
+            } else {
+                toggleBtn.innerHTML = '<i class="fas fa-toggle-off"></i> Auto Sync: OFF';
+                toggleBtn.style.color = 'var(--gray-600)';
+            }
+        }
+        
+        function viewOfflineChild(childId) {
+            const cachedChildren = storage.get('cachedChildren') || [];
+            const cachedVaccinations = storage.get('cachedVaccinations') || [];
+            
+            const child = cachedChildren.find(c => c.id === childId);
+            if (!child) {
+                alert('Child data not found in cache');
+                return;
+            }
+            
+            const childVaccinations = cachedVaccinations.filter(v => v.childId === childId);
+            const schedule = vaccineSchedule.generateSchedule(child.dateOfBirth);
+            
+            // Create a simple view modal (you could enhance this)
+            const modalContent = `
+                <div style="background: white; padding: 2rem; border-radius: var(--border-radius-lg); max-width: 600px; margin: 0 auto;">
+                    <h2>${child.firstName} ${child.lastName}</h2>
+                    <p><strong>Age:</strong> ${utils.calculateAge(child.dateOfBirth)}</p>
+                    <p><strong>Date of Birth:</strong> ${utils.formatDate(child.dateOfBirth)}</p>
+                    
+                    <h3>Vaccination Status</h3>
+                    <ul>
+                        ${schedule.map(vaccine => {
+                            const vaccination = childVaccinations.find(v => v.vaccine === vaccine.name && v.administered);
+                            const status = vaccination ? 'Completed' : vaccine.status;
+                            return `<li>${vaccine.name}: ${status}</li>`;
+                        }).join('')}
+                    </ul>
+                    
+                    <button onclick="this.parentElement.parentElement.remove()" class="btn btn-primary">Close</button>
+                </div>
+            `;
+            
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                padding: 1rem;
+            `;
+            overlay.innerHTML = modalContent;
+            
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.remove();
+                }
+            });
+            
+            document.body.appendChild(overlay);
+        }
+        
+        function printOfflineSchedule(childId) {
+            const cachedChildren = storage.get('cachedChildren') || [];
+            const child = cachedChildren.find(c => c.id === childId);
+            
+            if (!child) {
+                alert('Child data not found in cache');
+                return;
+            }
+            
+            const schedule = vaccineSchedule.generateSchedule(child.dateOfBirth);
+            
+            const printContent = `
+                <html>
+                <head>
+                    <title>Vaccination Schedule - ${child.firstName} ${child.lastName}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        .header { text-align: center; margin-bottom: 30px; }
+                        .child-info { background: #f5f5f5; padding: 15px; margin-bottom: 20px; }
+                        .vaccine { border: 1px solid #ddd; margin: 5px 0; padding: 10px; }
+                        .offline-note { background: #fff3cd; padding: 10px; margin-bottom: 20px; border-left: 4px solid #ffc107; }
+                    </style>
+                </head>
+                <body>
+                    <div class="offline-note">
+                        <strong>Note:</strong> This schedule was generated offline and may not reflect the most recent data.
+                    </div>
+                    <div class="header">
+                        <h1>Vaccination Schedule (Offline)</h1>
+                        <h2>${child.firstName} ${child.lastName}</h2>
+                    </div>
+                    <div class="child-info">
+                        <p><strong>Date of Birth:</strong> ${utils.formatDate(child.dateOfBirth)}</p>
+                        <p><strong>Age:</strong> ${utils.calculateAge(child.dateOfBirth)}</p>
+                    </div>
+                    ${schedule.map(vaccine => `
+                        <div class="vaccine">
+                            <strong>${vaccine.name}</strong> - ${vaccine.description}<br>
+                            Due: ${utils.formatDate(vaccine.dueDate)} | Status: ${vaccine.status}
+                        </div>
+                    `).join('')}
+                </body>
+                </html>
+            `;
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            printWindow.print();
+        }
+    </script>
+    
+    <style>
+        .btn-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .connection-indicator {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+    </style>
+</body>
+</html>

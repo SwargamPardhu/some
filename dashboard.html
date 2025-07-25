@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Dashboard - ImmunTracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <i class="fas fa-shield-alt"></i>
+                ImmunTracker
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="register-child.html">Register Child</a></li>
+                <li><a href="view-records.html">View Records</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="offline.html">Offline</a></li>
+            </ul>
+            <button class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="section">
+        <div class="container">
+            <div class="flex-between mb-4">
+                <div>
+                    <h1 style="font-size: 2.5rem; font-weight: 700; color: var(--gray-800); margin-bottom: 0.5rem;">
+                        Healthcare Dashboard
+                    </h1>
+                    <p style="font-size: 1.125rem; color: var(--gray-600);">
+                        Comprehensive immunization statistics and analytics
+                    </p>
+                </div>
+                <div class="flex" style="gap: 0.5rem;">
+                    <button id="refreshBtn" class="btn btn-secondary">
+                        <i class="fas fa-sync-alt"></i>
+                        Refresh Data
+                    </button>
+                    <button id="exportBtn" class="btn btn-primary">
+                        <i class="fas fa-download"></i>
+                        Export Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- Key Statistics -->
+            <div class="grid grid-4 mb-4" id="keyStats">
+                <!-- Stats will be loaded dynamically -->
+            </div>
+
+            <!-- Charts Row 1 -->
+            <div class="grid grid-2 mb-4">
+                <!-- Vaccination Coverage Chart -->
+                <div class="chart-container">
+                    <h3 class="chart-title">
+                        <i class="fas fa-chart-pie" style="color: var(--primary-500); margin-right: 0.5rem;"></i>
+                        Vaccination Coverage
+                    </h3>
+                    <div style="position: relative; height: 300px;">
+                        <canvas id="coverageChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Age Distribution Chart -->
+                <div class="chart-container">
+                    <h3 class="chart-title">
+                        <i class="fas fa-chart-bar" style="color: var(--secondary-500); margin-right: 0.5rem;"></i>
+                        Age Distribution
+                    </h3>
+                    <div style="position: relative; height: 300px;">
+                        <canvas id="ageChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row 2 -->
+            <div class="grid grid-2 mb-4">
+                <!-- Vaccination Timeline -->
+                <div class="chart-container">
+                    <h3 class="chart-title">
+                        <i class="fas fa-chart-line" style="color: var(--accent-500); margin-right: 0.5rem;"></i>
+                        Vaccination Timeline (Last 6 Months)
+                    </h3>
+                    <div style="position: relative; height: 300px;">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Vaccine Types -->
+                <div class="chart-container">
+                    <h3 class="chart-title">
+                        <i class="fas fa-syringe" style="color: var(--success-500); margin-right: 0.5rem;"></i>
+                        Most Common Vaccines
+                    </h3>
+                    <div style="position: relative; height: 300px;">
+                        <canvas id="vaccineTypesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Tables -->
+            <div class="grid grid-2">
+                <!-- Recent Activity -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-clock" style="color: var(--primary-500); margin-right: 0.5rem;"></i>
+                            Recent Activity
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="recentActivity">
+                            <!-- Recent activity will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Overdue Vaccinations -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-exclamation-triangle" style="color: var(--error-500); margin-right: 0.5rem;"></i>
+                            Overdue Vaccinations
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="overdueList">
+                            <!-- Overdue vaccinations will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Statistics -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-table" style="color: var(--secondary-500); margin-right: 0.5rem;"></i>
+                        Detailed Statistics
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table" id="detailedStatsTable">
+                            <thead>
+                                <tr>
+                                    <th>Vaccine Type</th>
+                                    <th>Total Doses</th>
+                                    <th>Completed</th>
+                                    <th>Due</th>
+                                    <th>Overdue</th>
+                                    <th>Coverage %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Table data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+    <script src="config.js"></script>
+    <script src="firebase-utils.js"></script>
+    <script src="utils.js"></script>
+    <script>
+        let dashboardData = {
+            children: [],
+            vaccinations: [],
+            statistics: {}
+        };
+        
+        let charts = {};
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDashboardData();
+            setupEventListeners();
+        });
+        
+        function setupEventListeners() {
+            document.getElementById('refreshBtn').addEventListener('click', loadDashboardData);
+            document.getElementById('exportBtn').addEventListener('click', exportReport);
+        }
+        
+        async function loadDashboardData() {
+            const refreshBtn = document.getElementById('refreshBtn');
+            const originalText = refreshBtn.innerHTML;
+            refreshBtn.innerHTML = '<div class="loading"></div> Loading...';
+            refreshBtn.disabled = true;
+            
+            try {
+                // Load children and vaccinations
+                const [childrenResult, vaccinationsResult] = await Promise.all([
+                    childOperations.getAllChildren(),
+                    vaccinationOperations.getAllVaccinations()
+                ]);
+                
+                dashboardData.children = childrenResult.success ? childrenResult.data : [];
+                dashboardData.vaccinations = vaccinationsResult.success ? vaccinationsResult.data : [];
+                
+                // Calculate statistics
+                calculateStatistics();
+                
+                // Update UI components
+                updateKeyStats();
+                updateCharts();
+                updateTables();
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                utils.showError(document.querySelector('.container'), `Failed to load dashboard data: ${error.message}`);
+            } finally {
+                refreshBtn.innerHTML = originalText;
+                refreshBtn.disabled = false;
+            }
+        }
+        
+        function calculateStatistics() {
+            const stats = {
+                totalChildren: dashboardData.children.length,
+                totalVaccinations: dashboardData.vaccinations.filter(v => v.administered).length,
+                pendingVaccinations: dashboardData.vaccinations.filter(v => !v.administered).length,
+                overdueVaccinations: 0,
+                ageGroups: { '0-1': 0, '1-5': 0, '5+': 0 },
+                vaccineTypes: {},
+                monthlyVaccinations: {},
+                recentActivity: []
+            };
+            
+            // Calculate age groups and overdue vaccinations
+            dashboardData.children.forEach(child => {
+                const age = calculateChildAge(child.dateOfBirth);
+                if (age < 1) stats.ageGroups['0-1']++;
+                else if (age < 5) stats.ageGroups['1-5']++;
+                else stats.ageGroups['5+']++;
+                
+                // Generate schedule for each child to check overdue
+                const schedule = vaccineSchedule.generateSchedule(child.dateOfBirth);
+                stats.overdueVaccinations += schedule.filter(v => v.status === 'overdue').length;
+            });
+            
+            // Calculate vaccine types and monthly data
+            dashboardData.vaccinations.forEach(vaccination => {
+                if (vaccination.administered) {
+                    // Vaccine types
+                    if (!stats.vaccineTypes[vaccination.vaccine]) {
+                        stats.vaccineTypes[vaccination.vaccine] = 0;
+                    }
+                    stats.vaccineTypes[vaccination.vaccine]++;
+                    
+                    // Monthly vaccinations
+                    if (vaccination.dateAdministered) {
+                        const month = new Date(vaccination.dateAdministered).toISOString().slice(0, 7);
+                        if (!stats.monthlyVaccinations[month]) {
+                            stats.monthlyVaccinations[month] = 0;
+                        }
+                        stats.monthlyVaccinations[month]++;
+                    }
+                    
+                    // Recent activity
+                    stats.recentActivity.push({
+                        type: 'vaccination',
+                        vaccine: vaccination.vaccine,
+                        childId: vaccination.childId,
+                        date: vaccination.dateAdministered,
+                        createdAt: vaccination.createdAt
+                    });
+                }
+            });
+            
+            // Sort recent activity
+            stats.recentActivity.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+            stats.recentActivity = stats.recentActivity.slice(0, 10);
+            
+            // Calculate coverage percentage
+            const expectedVaccinations = stats.totalChildren * 12; // Assuming 12 vaccines per child
+            stats.coveragePercentage = expectedVaccinations > 0 ? Math.round((stats.totalVaccinations / expectedVaccinations) * 100) : 0;
+            
+            dashboardData.statistics = stats;
+        }
+        
+        function calculateChildAge(birthDate) {
+            const birth = new Date(birthDate);
+            const today = new Date();
+            return today.getFullYear() - birth.getFullYear();
+        }
+        
+        function updateKeyStats() {
+            const stats = dashboardData.statistics;
+            const container = document.getElementById('keyStats');
+            
+            container.innerHTML = `
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--primary-600); margin-bottom: 0.5rem;">
+                            ${stats.totalChildren}
+                        </div>
+                        <div style="color: var(--gray-600); font-weight: 500;">
+                            Total Children
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--success-500); margin-bottom: 0.5rem;">
+                            ${stats.totalVaccinations}
+                        </div>
+                        <div style="color: var(--gray-600); font-weight: 500;">
+                            Completed Vaccinations
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--error-500); margin-bottom: 0.5rem;">
+                            ${stats.overdueVaccinations}
+                        </div>
+                        <div style="color: var(--gray-600); font-weight: 500;">
+                            Overdue Vaccinations
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-500); margin-bottom: 0.5rem;">
+                            ${stats.coveragePercentage}%
+                        </div>
+                        <div style="color: var(--gray-600); font-weight: 500;">
+                            Coverage Rate
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function updateCharts() {
+            const stats = dashboardData.statistics;
+            
+            // Vaccination Coverage Chart
+            updateCoverageChart(stats);
+            
+            // Age Distribution Chart
+            updateAgeChart(stats);
+            
+            // Timeline Chart
+            updateTimelineChart(stats);
+            
+            // Vaccine Types Chart
+            updateVaccineTypesChart(stats);
+        }
+        
+        function updateCoverageChart(stats) {
+            const ctx = document.getElementById('coverageChart').getContext('2d');
+            
+            if (charts.coverage) {
+                charts.coverage.destroy();
+            }
+            
+            charts.coverage = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Completed', 'Pending', 'Overdue'],
+                    datasets: [{
+                        data: [stats.totalVaccinations, stats.pendingVaccinations, stats.overdueVaccinations],
+                        backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateAgeChart(stats) {
+            const ctx = document.getElementById('ageChart').getContext('2d');
+            
+            if (charts.age) {
+                charts.age.destroy();
+            }
+            
+            charts.age = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['0-1 years', '1-5 years', '5+ years'],
+                    datasets: [{
+                        label: 'Number of Children',
+                        data: [stats.ageGroups['0-1'], stats.ageGroups['1-5'], stats.ageGroups['5+']],
+                        backgroundColor: '#3b82f6',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateTimelineChart(stats) {
+            const ctx = document.getElementById('timelineChart').getContext('2d');
+            
+            if (charts.timeline) {
+                charts.timeline.destroy();
+            }
+            
+            // Get last 6 months of data
+            const last6Months = {};
+            const now = new Date();
+            
+            for (let i = 5; i >= 0; i--) {
+                const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                const key = date.toISOString().slice(0, 7);
+                last6Months[key] = stats.monthlyVaccinations[key] || 0;
+            }
+            
+            charts.timeline = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(last6Months).map(month => {
+                        const date = new Date(month + '-01');
+                        return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                    }),
+                    datasets: [{
+                        label: 'Vaccinations',
+                        data: Object.values(last6Months),
+                        borderColor: '#f97316',
+                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateVaccineTypesChart(stats) {
+            const ctx = document.getElementById('vaccineTypesChart').getContext('2d');
+            
+            if (charts.vaccineTypes) {
+                charts.vaccineTypes.destroy();
+            }
+            
+            const sortedVaccines = Object.entries(stats.vaccineTypes)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 8); // Top 8 vaccines
+            
+            charts.vaccineTypes = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sortedVaccines.map(([vaccine]) => vaccine),
+                    datasets: [{
+                        label: 'Number of Doses',
+                        data: sortedVaccines.map(([, count]) => count),
+                        backgroundColor: '#14b8a6',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                maxRotation: 45
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateTables() {
+            updateRecentActivity();
+            updateOverdueList();
+            updateDetailedStats();
+        }
+        
+        function updateRecentActivity() {
+            const container = document.getElementById('recentActivity');
+            const activity = dashboardData.statistics.recentActivity;
+            
+            if (activity.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center" style="padding: 2rem; color: var(--gray-500);">
+                        <i class="fas fa-clock" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <p>No recent activity</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = activity.map(item => {
+                const child = dashboardData.children.find(c => c.id === item.childId);
+                const childName = child ? `${child.firstName} ${child.lastName}` : 'Unknown Child';
+                
+                return `
+                    <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--gray-200);">
+                        <div style="font-weight: 500; color: var(--gray-800);">
+                            ${item.vaccine} - ${childName}
+                        </div>
+                        <div style="font-size: 0.875rem; color: var(--gray-600);">
+                            ${item.date ? utils.formatDate(item.date) : 'Date not specified'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function updateOverdueList() {
+            const container = document.getElementById('overdueList');
+            
+            // Generate overdue list
+            const overdueList = [];
+            dashboardData.children.forEach(child => {
+                const schedule = vaccineSchedule.generateSchedule(child.dateOfBirth);
+                const overdue = schedule.filter(v => v.status === 'overdue');
+                overdue.forEach(vaccine => {
+                    overdueList.push({
+                        child: child,
+                        vaccine: vaccine
+                    });
+                });
+            });
+            
+            if (overdueList.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center" style="padding: 2rem; color: var(--success-500);">
+                        <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <p>No overdue vaccinations!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = overdueList.slice(0, 10).map(item => `
+                <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--gray-200);">
+                    <div style="font-weight: 500; color: var(--error-500);">
+                        ${item.vaccine.name} - ${item.child.firstName} ${item.child.lastName}
+                    </div>
+                    <div style="font-size: 0.875rem; color: var(--gray-600);">
+                        Due: ${utils.formatDate(item.vaccine.dueDate)}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function updateDetailedStats() {
+            const tbody = document.querySelector('#detailedStatsTable tbody');
+            const stats = dashboardData.statistics;
+            
+            // Calculate detailed stats for each vaccine type
+            const vaccineStats = {};
+            
+            // Initialize with all vaccine types from schedule
+            vaccineSchedule.vaccines.forEach(vaccine => {
+                vaccineStats[vaccine.name] = {
+                    total: dashboardData.children.length,
+                    completed: 0,
+                    due: 0,
+                    overdue: 0
+                };
+            });
+            
+            // Count actual vaccinations
+            dashboardData.children.forEach(child => {
+                const schedule = vaccineSchedule.generateSchedule(child.dateOfBirth);
+                const childVaccinations = dashboardData.vaccinations.filter(v => v.childId === child.id);
+                
+                schedule.forEach(scheduleItem => {
+                    const vaccination = childVaccinations.find(v => v.vaccine === scheduleItem.name && v.administered);
+                    
+                    if (vaccination) {
+                        vaccineStats[scheduleItem.name].completed++;
+                    } else {
+                        if (scheduleItem.status === 'due') {
+                            vaccineStats[scheduleItem.name].due++;
+                        } else if (scheduleItem.status === 'overdue') {
+                            vaccineStats[scheduleItem.name].overdue++;
+                        }
+                    }
+                });
+            });
+            
+            tbody.innerHTML = Object.entries(vaccineStats).map(([vaccine, data]) => {
+                const coverage = data.total > 0 ? Math.round((data.completed / data.total) * 100) : 0;
+                
+                return `
+                    <tr>
+                        <td><strong>${vaccine}</strong></td>
+                        <td>${data.total}</td>
+                        <td style="color: var(--success-500);">${data.completed}</td>
+                        <td style="color: var(--warning-500);">${data.due}</td>
+                        <td style="color: var(--error-500);">${data.overdue}</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div style="flex: 1; background: var(--gray-200); height: 8px; border-radius: 4px; overflow: hidden;">
+                                    <div style="background: var(--success-500); height: 100%; width: ${coverage}%; transition: var(--transition);"></div>
+                                </div>
+                                <span style="font-weight: 500; min-width: 40px;">${coverage}%</span>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        function exportReport() {
+            const reportData = {
+                generatedAt: new Date().toISOString(),
+                summary: dashboardData.statistics,
+                children: dashboardData.children,
+                vaccinations: dashboardData.vaccinations
+            };
+            
+            const dataStr = JSON.stringify(reportData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `immunization-report-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            utils.showSuccess('Report exported successfully!');
+        }
+    </script>
+</body>
+</html>

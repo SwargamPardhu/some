@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Children's Immunization Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">    
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <i class="fas fa-shield-alt"></i>
+                ImmunTracker
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="register-child.html">Register Child</a></li>
+                <li><a href="view-records.html">View Records</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="education.html">Education</a></li>
+                <li><a href="offline.html">Offline</a></li>
+            </ul>
+            <button class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Children's Immunization Tracker</h1>
+            <p>Keep your child's vaccination records safe, organized, and up-to-date. Track immunization schedules, get reminders, and ensure your child never misses a crucial vaccine.</p>
+            <div class="flex flex-center" style="gap: 1rem; flex-wrap: wrap;">
+                <a href="register-child.html" class="btn btn-white">
+                    <i class="fas fa-plus"></i>
+                    Register Child
+                </a>
+                <a href="view-records.html" class="btn btn-outline" style="border-color: white; color: white;">
+                    <i class="fas fa-list"></i>
+                    View Records
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 style="font-size: 2.5rem; font-weight: 700; color: var(--gray-800); margin-bottom: 1rem;">
+                    Why Choose ImmunTracker?
+                </h2>
+                <p style="font-size: 1.25rem; color: var(--gray-600); max-width: 600px; margin: 0 auto;">
+                    Comprehensive vaccination management made simple and secure
+                </p>
+            </div>
+            
+            <div class="grid grid-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="background: linear-gradient(135deg, var(--primary-500), var(--secondary-500)); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                            <i class="fas fa-calendar-check" style="color: white; font-size: 1.5rem;"></i>
+                        </div>
+                        <h3 class="card-title">Smart Scheduling</h3>
+                        <p class="card-text">Automatic vaccine schedules based on WHO guidelines and your child's birth date. Never miss an important vaccination again.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="background: linear-gradient(135deg, var(--secondary-500), var(--accent-500)); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                            <i class="fas fa-shield-alt" style="color: white; font-size: 1.5rem;"></i>
+                        </div>
+                        <h3 class="card-title">Secure Records</h3>
+                        <p class="card-text">Your child's vaccination records are safely stored in the cloud with real-time synchronization across all your devices.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="background: linear-gradient(135deg, var(--accent-500), var(--primary-500)); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                            <i class="fas fa-chart-line" style="color: white; font-size: 1.5rem;"></i>
+                        </div>
+                        <h3 class="card-title">Healthcare Analytics</h3>
+                        <p class="card-text">Healthcare providers can access comprehensive dashboards with immunization statistics and coverage data.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="background: linear-gradient(135deg, var(--success-500), var(--secondary-500)); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                            <i class="fas fa-mobile-alt" style="color: white; font-size: 1.5rem;"></i>
+                        </div>
+                        <h3 class="card-title">Mobile Friendly</h3>
+                        <p class="card-text">Access your child's immunization records anywhere, anytime. Fully responsive design works on all devices.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="background: linear-gradient(135deg, var(--warning-500), var(--primary-500)); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                            <i class="fas fa-graduation-cap" style="color: white; font-size: 1.5rem;"></i>
+                        </div>
+                        <h3 class="card-title">Educational Resources</h3>
+                        <p class="card-text">Learn about vaccines, their importance, and get answers to common questions from trusted medical sources.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div style="background: linear-gradient(135deg, var(--error-500), var(--accent-500)); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                            <i class="fas fa-wifi" style="color: white; font-size: 1.5rem;"></i>
+                        </div>
+                        <h3 class="card-title">Offline Support</h3>
+                        <p class="card-text">Access your child's basic vaccination information even when offline. Data syncs when connection is restored.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Stats Section -->
+    <section class="section" style="background: linear-gradient(135deg, var(--gray-50), var(--primary-50));">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 style="font-size: 2rem; font-weight: 600; color: var(--gray-800); margin-bottom: 2rem;">
+                    Quick Overview
+                </h2>
+            </div>
+            
+            <div class="grid grid-4" id="quickStats">
+                <!-- Stats will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section">
+        <div class="container">
+            <div class="card" style="background: linear-gradient(135deg, var(--primary-600), var(--secondary-500)); border: none;">
+                <div class="card-body text-center" style="padding: 3rem;">
+                    <h2 style="color: white; font-size: 2rem; font-weight: 600; margin-bottom: 1rem;">
+                        Ready to Get Started?
+                    </h2>
+                    <p style="color: rgba(255, 255, 255, 0.9); font-size: 1.125rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                        Join thousands of parents who trust ImmunTracker to keep their children's vaccination records safe and up-to-date.
+                    </p>
+                    <div class="flex flex-center" style="gap: 1rem; flex-wrap: wrap;">
+                        <a href="register-child.html" class="btn btn-white">
+                            <i class="fas fa-plus"></i>
+                            Register Your First Child
+                        </a>
+                        <a href="education.html" class="btn btn-outline" style="border-color: white; color: white;">
+                            <i class="fas fa-book"></i>
+                            Learn About Vaccines
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+    <script src="config.js"></script>
+    <script src="firebase-utils.js"></script>
+    <script src="utils.js"></script>
+    <script>
+        // Load quick stats
+        async function loadQuickStats() {
+            const statsContainer = document.getElementById('quickStats');
+            utils.showLoading(statsContainer);
+            
+            try {
+                const [childrenResult, vaccinationsResult] = await Promise.all([
+                    childOperations.getAllChildren(),
+                    vaccinationOperations.getAllVaccinations()
+                ]);
+                
+                const totalChildren = childrenResult.success ? childrenResult.data.length : 0;
+                const totalVaccinations = vaccinationsResult.success ? vaccinationsResult.data.length : 0;
+                
+                // Calculate completion rate
+                const expectedVaccinations = totalChildren * 12; // Assuming 12 vaccines per child
+                const completionRate = expectedVaccinations > 0 ? Math.round((totalVaccinations / expectedVaccinations) * 100) : 0;
+                
+                statsContainer.innerHTML = `
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--primary-600); margin-bottom: 0.5rem;">
+                                ${totalChildren}
+                            </div>
+                            <div style="color: var(--gray-600); font-weight: 500;">
+                                Registered Children
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--secondary-600); margin-bottom: 0.5rem;">
+                                ${totalVaccinations}
+                            </div>
+                            <div style="color: var(--gray-600); font-weight: 500;">
+                                Vaccinations Recorded
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--success-500); margin-bottom: 0.5rem;">
+                                ${completionRate}%
+                            </div>
+                            <div style="color: var(--gray-600); font-weight: 500;">
+                                Completion Rate
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--accent-600); margin-bottom: 0.5rem;">
+                                12
+                            </div>
+                            <div style="color: var(--gray-600); font-weight: 500;">
+                                Vaccine Types
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                utils.showError(statsContainer, 'Failed to load statistics');
+            }
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuickStats();
+        });
+    </script>
+</body>
+</html>
